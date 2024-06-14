@@ -5,7 +5,9 @@ import edu.miu.attendifypro.dto.CourseDto;
 import edu.miu.attendifypro.mapper.CourseMapper;
 import edu.miu.attendifypro.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CourseServiceImpl implements CourseService{
 
     @Autowired
