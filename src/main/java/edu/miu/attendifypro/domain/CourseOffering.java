@@ -21,24 +21,24 @@ import java.util.List;
 @Entity
 public class CourseOffering {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private int capacity;
 
     private String courseOfferingType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Faculty faculty;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Course courses;
 
     @Embedded

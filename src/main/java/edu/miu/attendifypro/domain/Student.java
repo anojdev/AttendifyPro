@@ -24,7 +24,7 @@ public class Student extends Person {
 
     private String applicantId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Faculty facultyAdvisor;
 
 }

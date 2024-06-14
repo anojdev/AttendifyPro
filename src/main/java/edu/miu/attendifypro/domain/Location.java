@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private int capacity;
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private LocationType locationType;
 
     @Embedded
