@@ -19,6 +19,7 @@ import java.util.Optional;
 @Service
 public class CourseServiceImpl implements CourseService{
 
+    //TODO Prerequisite check and handling
     private final CourseMapper courseMapper;
     private final CourseRepository courseRepository;
 

@@ -46,7 +46,8 @@ public class CourseController {
     }
     @GetMapping("")
     public ResponseEntity<ApiResponse<Page<CourseDto>>> getCourses(Pageable pageableReq) {
-        Pageable pageable = PageRequest.of(pageableReq.getPageNumber(), pageableReq.getPageSize() - 1,
+        Pageable pageable = PageRequest.of(pageableReq.getPageNumber()>0? pageableReq.getPageNumber()-1 : 0,
+                pageableReq.getPageSize() ,
                 pageableReq.getSort());
         ServiceResponse<Page<CourseDto>> coursePage= courseService.getCoursePage(pageable);
         ApiResponse<Page<CourseDto>> apiResponse = ApiResponse.<Page<CourseDto>>builder().status(false)
