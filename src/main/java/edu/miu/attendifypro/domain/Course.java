@@ -11,16 +11,14 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Entity
 @RequiredArgsConstructor
 public class Course {
-    @NonNull
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     @Column(nullable = false)
     private int credits;
 

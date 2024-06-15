@@ -23,16 +23,6 @@ public class CourseMapper {
     }
 
     public Course dtoToEntity(CourseDto course){
-        return new Course(
-                course.getId(),
-                course.getCredits(),
-                course.getCourseCode(),
-                course.getCourseName(),
-                course.getCourseDescription(),
-                course.getDepartment(),
-                course.getPrerequisites().stream()
-                        .map(a->dtoToEntity(a))
-                        .collect(Collectors.toList())
-        );
+        return new Course( );
     }
 }
