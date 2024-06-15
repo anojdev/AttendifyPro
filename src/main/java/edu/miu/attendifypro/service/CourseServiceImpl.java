@@ -6,6 +6,7 @@ import edu.miu.attendifypro.mapper.CourseMapper;
 import edu.miu.attendifypro.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseServiceImpl implements CourseService{
@@ -14,10 +15,13 @@ public class CourseServiceImpl implements CourseService{
     private CourseMapper courseMapper;
     @Autowired
     private CourseRepository courseRepository;
+
+    @Transactional
     public CourseDto createCourse(CourseDto courseDto) {
         Course course = courseMapper.dtoToEntity(courseDto);
-        courseRepository.save(course);
-        return courseMapper.entityToDto(courseRepository.findById(course.getId()).get());
+        course = courseRepository.save(course);
+        courseDto.setId(course.getId());
+        return courseDto;
     }
 
     public CourseDto updateCourse(Long id,CourseDto courseDto) {
@@ -28,11 +32,21 @@ public class CourseServiceImpl implements CourseService{
         course = courseMapper.dtoToEntity(courseDto);
         course.setId(id);
         courseRepository.save(course);
-        return courseMapper.entityToDto(courseRepository.findById(course.getId()).get());
+        return courseDto;
     }
 
-    public CourseDto getAccount(Long id) {
+    public CourseDto getCourse(Long id) {
         Course course = courseRepository.findById(id).get();
         return courseMapper.entityToDto(course);
+    }
+
+    public CourseDto deleteCourse(Long id) {
+        Course course = courseRepository.findById(id).get();
+        if(course==null)
+            return null;
+
+        CourseDto courseDto = courseMapper.entityToDto(course);
+        courseRepository.delete(course);
+        return courseDto;
     }
 }
