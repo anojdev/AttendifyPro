@@ -10,7 +10,13 @@ public class StudentMapper {
                 student.getEntry(),
                 student.getStudentId(),
                 student.getApplicantId(),
-                student.getFacultyAdvisor()
+                student.getFacultyAdvisor(),
+                student.getFirstName(),
+                student.getLastName(),
+                student.getBirthDate(),
+                student.getEmail(),
+                student.getGender(),
+                student.getAccount()
         );
     }
 
