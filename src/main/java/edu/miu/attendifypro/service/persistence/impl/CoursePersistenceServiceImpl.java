@@ -43,7 +43,7 @@ public class CoursePersistenceServiceImpl implements CoursePersistenceService {
 
     @Override
     public Optional<Course> findByCourseCode(String courseCode) {
-        return findByCourseCode(courseCode);
+        return courseRepository.findByCourseCode(courseCode);
     }
 
     @Override
