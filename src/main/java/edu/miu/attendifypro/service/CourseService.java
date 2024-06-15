@@ -1,10 +1,11 @@
 package edu.miu.attendifypro.service;
 
-import edu.miu.attendifypro.dto.CourseDto;
+import edu.miu.attendifypro.dto.CourseRequestDto;
+import edu.miu.attendifypro.dto.CourseResponseDto;
 
 public interface CourseService {
-    CourseDto createCourse(CourseDto courseDto);
-    CourseDto updateCourse(Long id,CourseDto courseDto);
-    CourseDto getCourse(Long id);
-    CourseDto deleteCourse(Long id);
+    CourseResponseDto createCourse(CourseRequestDto courseDto);
+    CourseResponseDto updateCourse(Long id, CourseRequestDto courseDto);
+    CourseResponseDto getCourse(Long id);
+    CourseResponseDto deleteCourse(Long id);
 }

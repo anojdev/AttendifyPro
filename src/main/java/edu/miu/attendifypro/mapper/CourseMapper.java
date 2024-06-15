@@ -1,18 +1,19 @@
 package edu.miu.attendifypro.mapper;
 
 import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.dto.CourseDto;
+import edu.miu.attendifypro.dto.CourseRequestDto;
+import edu.miu.attendifypro.dto.CourseResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
 public class CourseMapper {
-    public CourseDto entityToDto(Course course){
+    public CourseResponseDto entityToResponseDto(Course course){
         if(course==null)
             return null;
 
-        return new CourseDto(
+        return new CourseResponseDto(
                 course.getId(),
                 course.getCredits(),
                 course.getCourseCode(),
@@ -21,27 +22,31 @@ public class CourseMapper {
                 course.getDepartment(),
                 course.getPrerequisites()!=null?
                     course.getPrerequisites().stream()
-                        .map(a->entityToDto(a))
+                        .map(a->entityToResponseDto(a))
                         .collect(Collectors.toList()) :null
         );
     }
 
-    public Course dtoToEntity(CourseDto course){
-        if(course==null)
+    public Course requestDtoToEntity(CourseRequestDto dto){
+        if(dto==null)
             return null;
 
         Course entity= new Course(
-                course.getId(),
-                course.getCredits(),
-                course.getCourseCode(),
-                course.getCourseName(),
-                course.getCourseDescription(),
-                course.getDepartment()
+                dto.getId(),
+                dto.getCredits(),
+                dto.getCourseCode(),
+                dto.getCourseName(),
+                dto.getCourseDescription(),
+                dto.getDepartment()
         );
-        if(course.getPrerequisites()!=null && course.getPrerequisites().size()>0){
+        if(dto.getPrerequisites()!=null){
             entity.setPrerequisites(
-                    course.getPrerequisites().stream()
-                            .map(a->dtoToEntity(a))
+                    dto.getPrerequisites().stream()
+                            .map(a->{
+                                Course c= new Course();
+                                c.setId(a);
+                                return c;
+                            })
                             .collect(Collectors.toList())
             );
         }
