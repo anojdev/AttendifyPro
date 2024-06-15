@@ -17,5 +17,4 @@ public class CourseDto {
     private String courseDescription;
     private String department;
     private List<CourseDto> prerequisites;
-//    AuditInfo auditInfo;
 }

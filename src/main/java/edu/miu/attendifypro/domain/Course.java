@@ -38,8 +38,7 @@ public class Course {
     @NonNull
     private String department;
 
-    @NonNull
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "course_prerequisite",
             joinColumns = @JoinColumn(name = "course_id"),
