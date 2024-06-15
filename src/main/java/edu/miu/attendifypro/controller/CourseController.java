@@ -119,6 +119,7 @@ public class CourseController {
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
         return new ResponseEntity<ApiResponse<Boolean>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
+
     }
 
 }

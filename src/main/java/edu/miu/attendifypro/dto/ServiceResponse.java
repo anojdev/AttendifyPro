@@ -50,6 +50,11 @@ public final class ServiceResponse<T> {
         third.forEach(str -> hashMap.put(str, new ArrayList<>()));
         return new ServiceResponse<>(first, second, hashMap);
     }
+    public static <T> ServiceResponse<T> of(AppStatusCode second,String message) {
+        ServiceResponse<T> rsp= new ServiceResponse<>(null, second, new HashMap<String, List<String>>());
+        rsp.addMessage(message);
+        return rsp;
+    }
 
 
     public Optional<T> getData() {
@@ -77,6 +82,12 @@ public final class ServiceResponse<T> {
 
     public static <T> Collector<ServiceResponse<T>, ?, Map<Optional<T>, AppStatusCode>> toMap() {
         return Collectors.toMap(ServiceResponse::getData, ServiceResponse::getStatusCode);
+    }
+
+    public static <T> ServiceResponse<T> of(AppStatusCode second, List<String> third) {
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        third.forEach(str -> hashMap.put(str, new ArrayList<>()));
+        return new ServiceResponse<>(null, second, hashMap);
     }
 
     @Override

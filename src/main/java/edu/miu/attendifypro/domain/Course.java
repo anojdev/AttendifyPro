@@ -23,7 +23,7 @@ public class Course {
     private int credits;
 
     @NonNull
-    @Column(nullable = false,length = 15)
+    @Column(nullable = false,length = 15,unique = true)
     private String courseCode;
 
     @NonNull

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,5 +16,5 @@ public class CourseDto {
     private String courseName;
     private String courseDescription;
     private String department;
-    private List<CourseDto> prerequisites=new ArrayList<>();
+    private List<CourseDto> prerequisites;
 }

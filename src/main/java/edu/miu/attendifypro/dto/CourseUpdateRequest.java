@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author kush
  */
@@ -31,4 +34,6 @@ public class CourseUpdateRequest {
     @NotBlank(message = "{should.not.be.empty}")
     @NotNull(message = "{required}")
     private String department;
+
+    private List<Long> prerequisites=new ArrayList<>();
 }
