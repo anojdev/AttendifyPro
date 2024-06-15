@@ -1,7 +1,8 @@
 package edu.miu.attendifypro.service;
 
 import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.dto.CourseDto;
+import edu.miu.attendifypro.dto.CourseRequestDto;
+import edu.miu.attendifypro.dto.CourseResponseDto;
 import edu.miu.attendifypro.mapper.CourseMapper;
 import edu.miu.attendifypro.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,35 +18,34 @@ public class CourseServiceImpl implements CourseService{
     private CourseRepository courseRepository;
 
     @Transactional
-    public CourseDto createCourse(CourseDto courseDto) {
-        Course course = courseMapper.dtoToEntity(courseDto);
+    public CourseResponseDto createCourse(CourseRequestDto courseDto) {
+        Course course = courseMapper.requestDtoToEntity(courseDto);
         course = courseRepository.save(course);
-        courseDto.setId(course.getId());
-        return courseDto;
+        return courseMapper.entityToResponseDto(course);
     }
 
-    public CourseDto updateCourse(Long id,CourseDto courseDto) {
+    public CourseResponseDto updateCourse(Long id, CourseRequestDto courseDto) {
         Course course=courseRepository.findById(id).get();
         if(course==null)
             return null;
 
-        course = courseMapper.dtoToEntity(courseDto);
+        course = courseMapper.requestDtoToEntity(courseDto);
         course.setId(id);
-        courseRepository.save(course);
-        return courseDto;
+        course = courseRepository.save(course);
+        return courseMapper.entityToResponseDto(course);
     }
 
-    public CourseDto getCourse(Long id) {
+    public CourseResponseDto getCourse(Long id) {
         Course course = courseRepository.findById(id).get();
-        return courseMapper.entityToDto(course);
+        return courseMapper.entityToResponseDto(course);
     }
 
-    public CourseDto deleteCourse(Long id) {
+    public CourseResponseDto deleteCourse(Long id) {
         Course course = courseRepository.findById(id).get();
         if(course==null)
             return null;
 
-        CourseDto courseDto = courseMapper.entityToDto(course);
+        CourseResponseDto courseDto = courseMapper.entityToResponseDto(course);
         courseRepository.delete(course);
         return courseDto;
     }

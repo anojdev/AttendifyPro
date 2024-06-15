@@ -1,14 +1,12 @@
 package edu.miu.attendifypro.controller;
 
-import edu.miu.attendifypro.dto.CourseDto;
+import edu.miu.attendifypro.dto.CourseRequestDto;
+import edu.miu.attendifypro.dto.CourseResponseDto;
 import edu.miu.attendifypro.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/course")
@@ -18,30 +16,30 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
-        CourseDto courseDto = courseService.getCourse(id);
-        return new ResponseEntity<CourseDto>(courseDto, HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable long id){
+        CourseResponseDto courseDto = courseService.getCourse(id);
+        return new ResponseEntity<CourseResponseDto>(courseDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody CourseDto data) {
-        CourseDto courseDto = courseService.createCourse(data);
+    public ResponseEntity<?> post(@RequestBody CourseRequestDto data) {
+        CourseResponseDto courseDto = courseService.createCourse(data);
         if(courseDto==null)
             return new ResponseEntity<String>("Could not save data", HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return new ResponseEntity<CourseDto>(courseDto, HttpStatus.OK);
+        return new ResponseEntity<CourseResponseDto>(courseDto, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> put(@PathVariable Long id,@RequestBody CourseDto data) {
+    public ResponseEntity<?> put(@PathVariable Long id,@RequestBody CourseRequestDto data) {
         if(id!=data.getId())
             return new ResponseEntity<String>("Id do not match for body and url", HttpStatus.BAD_REQUEST);
 
-        CourseDto courseDto = courseService.updateCourse(id,data);
+        CourseResponseDto courseDto = courseService.updateCourse(id,data);
         if(courseDto==null)
             return new ResponseEntity<String>("Could not update data", HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return new ResponseEntity<CourseDto>(courseDto, HttpStatus.OK);
+        return new ResponseEntity<CourseResponseDto>(courseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -49,10 +47,10 @@ public class CourseController {
         if(id==null)
             return new ResponseEntity<String>("Please provide course id", HttpStatus.BAD_REQUEST);
 
-        CourseDto courseDto = courseService.deleteCourse(id);
+        CourseResponseDto courseDto = courseService.deleteCourse(id);
         if(courseDto==null)
             return new ResponseEntity<String>("Could not delete data", HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<CourseDto>(courseDto, HttpStatus.OK);
+        return new ResponseEntity<CourseResponseDto>(courseDto, HttpStatus.OK);
     }
 }
