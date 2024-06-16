@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * @author kush
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationResponse {
+public class LocationTypeDto {
     private long id;
-    private int capacity;
-    private String name;
-    private LocationTypeDto locationType;
+
+    private String type;
 }
