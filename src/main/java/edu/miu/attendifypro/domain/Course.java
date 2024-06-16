@@ -11,34 +11,27 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Entity
-@RequiredArgsConstructor
 public class Course {
-    @NonNull
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     @Column(nullable = false)
     private int credits;
 
-    @NonNull
-    @Column(nullable = false,length = 15)
+    @Column(nullable = false,length = 15,unique = true)
     private String courseCode;
 
-    @NonNull
     @Column(nullable = false,length = 200)
     private String courseName;
 
-    @NonNull
     private String courseDescription;
 
-    @NonNull
     private String department;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(
             name = "course_prerequisite",
             joinColumns = @JoinColumn(name = "course_id"),
