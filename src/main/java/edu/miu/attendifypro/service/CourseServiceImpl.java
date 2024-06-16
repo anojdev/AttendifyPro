@@ -8,8 +8,6 @@ import edu.miu.attendifypro.dto.CourseUpdateRequest;
 import edu.miu.attendifypro.dto.ServiceResponse;
 import edu.miu.attendifypro.mapper.DtoMapper;
 import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
-import lombok.NoArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -78,7 +76,7 @@ public class CourseServiceImpl implements CourseService{
                 HashSet<Long> uniqueRequisiteIds=new HashSet<>(courseCreateRequest.getPrerequisites());
                 prerequisiteCourses=persistenceService.findAllById(uniqueRequisiteIds);
                 if(uniqueRequisiteIds.size()!=prerequisiteCourses.size()){
-                    return ServiceResponse.of(AppStatusCode.E40002);
+                    return ServiceResponse.of(AppStatusCode.E40002,List.of("invalid.prerequisite.code"));
                 }
             }
 
@@ -89,10 +87,7 @@ public class CourseServiceImpl implements CourseService{
             persistenceService.save(course);
             return ServiceResponse.of(DtoMapper.dtoMapper.courseToCourseDto(course),AppStatusCode.S20001);
 
-        }
-        catch (DataIntegrityViolationException div){
-            return ServiceResponse.of(AppStatusCode.E40002);        }
-        catch(Exception e){
+        }catch(Exception e){
             return ServiceResponse.of(AppStatusCode.E50003);
         }
     }
