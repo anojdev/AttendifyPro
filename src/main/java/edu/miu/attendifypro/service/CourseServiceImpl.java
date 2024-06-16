@@ -6,9 +6,9 @@ import edu.miu.attendifypro.dto.CourseCreateRequest;
 import edu.miu.attendifypro.dto.CourseDto;
 import edu.miu.attendifypro.dto.CourseUpdateRequest;
 import edu.miu.attendifypro.dto.ServiceResponse;
-import edu.miu.attendifypro.mapper.CourseMapper;
 import edu.miu.attendifypro.mapper.DtoMapper;
 import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
+import lombok.NoArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@NoArgsConstructor(force = true)
 public class CourseServiceImpl implements CourseService{
 
-    private final CourseMapper courseMapper;
     private final CoursePersistenceService persistenceService;
 
-    public CourseServiceImpl(CourseMapper courseMapper, CoursePersistenceService persistenceService) {
-        this.courseMapper = courseMapper;
+    public CourseServiceImpl(CoursePersistenceService persistenceService) {
         this.persistenceService = persistenceService;
     }
 
@@ -44,7 +43,7 @@ public class CourseServiceImpl implements CourseService{
         try {
             Optional<Course> courseOpt = persistenceService.findById(id);
             if(courseOpt.isPresent()) {
-                return ServiceResponse.of(courseMapper.entityToDto(courseOpt.get()), AppStatusCode.S20005);
+                return ServiceResponse.of(DtoMapper.dtoMapper.courseToCourseDto(courseOpt.get()), AppStatusCode.S20005);
             }
             else{
                 return ServiceResponse.of(AppStatusCode.E40004);

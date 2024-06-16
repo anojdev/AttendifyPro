@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@RequiredArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,21 +21,16 @@ public class Course {
     @Column(nullable = false)
     private int credits;
 
-    @NonNull
     @Column(nullable = false,length = 15,unique = true)
     private String courseCode;
 
-    @NonNull
     @Column(nullable = false,length = 200)
     private String courseName;
 
-    @NonNull
     private String courseDescription;
 
-    @NonNull
     private String department;
 
-    @NonNull
     @ManyToMany
     @JoinTable(
             name = "course_prerequisite",

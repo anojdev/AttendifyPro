@@ -32,7 +32,6 @@ public class CourseController {
     }
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<CourseDto>>> getAllCourses() {
-
         ServiceResponse<List<CourseDto>> serviceRsp= courseService.getAllCourses();
         ApiResponse<List<CourseDto>> apiResponse = ApiResponse.<List<CourseDto>>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
