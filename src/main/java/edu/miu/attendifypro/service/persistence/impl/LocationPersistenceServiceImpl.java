@@ -1,8 +1,8 @@
 package edu.miu.attendifypro.service.persistence.impl;
 
-import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.repository.CourseRepository;
-import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
+import edu.miu.attendifypro.domain.Location;
+import edu.miu.attendifypro.repository.LocationRepository;
+import edu.miu.attendifypro.service.persistence.LocationPersistenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,47 +13,47 @@ import java.util.List;
 import java.util.Optional;
 @Service
 @Transactional
-public class LocationPersistenceService implements LocationPersistenceService {
+public class LocationPersistenceServiceImpl implements LocationPersistenceService {
 
-    private final CourseRepository courseRepository;
+    private final LocationRepository locationRepository;
 
 
-    public CoursePersistenceServiceImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public LocationPersistenceServiceImpl(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
     }
 
     @Override
-    public List<Course> findAll() {
-        return courseRepository.findAll();
+    public List<Location> findAll() {
+        return locationRepository.findAll();
     }
 
     @Override
-    public Page<Course> findAll(Pageable pageable) {
-        return courseRepository.findAll(pageable);
+    public Page<Location> findAll(Pageable pageable) {
+        return locationRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<Course> findById(Long id) {
-        return courseRepository.findById(id);
+    public Optional<Location> findById(Long id) {
+        return locationRepository.findById(id);
+    }
+
+//    @Override
+//    public Optional<Location> findByCourseCode(String courseCode) {
+//        return locationRepository.findByCourseCode(courseCode);
+//    }
+
+    @Override
+    public List<Location> findAllById(HashSet<Long> uniqueRequisiteIds) {
+        return locationRepository.findAllById(uniqueRequisiteIds);
     }
 
     @Override
-    public Optional<Course> findByCourseCode(String courseCode) {
-        return courseRepository.findByCourseCode(courseCode);
+    public Location save(Location course) {
+        return locationRepository.save(course);
     }
 
     @Override
-    public List<Course> findAllById(HashSet<Long> uniqueRequisiteIds) {
-        return courseRepository.findAllById(uniqueRequisiteIds);
-    }
-
-    @Override
-    public Course save(Course course) {
-        return courseRepository.save(course);
-    }
-
-    @Override
-    public void delete(Course course) {
-        courseRepository.delete(course);
+    public void delete(Location course) {
+        locationRepository.delete(course);
     }
 }
