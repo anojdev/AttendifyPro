@@ -19,7 +19,6 @@ import java.util.*;
 @Service
 public class CourseServiceImpl implements CourseService{
 
-    //TODO Prerequisite check and handling
     private final CourseMapper courseMapper;
     private final CoursePersistenceService persistenceService;
 

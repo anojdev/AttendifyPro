@@ -18,7 +18,7 @@ public interface DtoMapper {
             Mappers.getMapper(DtoMapper.class);
 
     CourseDto courseToCourseDto(Course course);
-    Course courseDtoToCours(CourseDto coursedto);
+    Course courseDtoToCourse(CourseDto coursedto);
 
     @Mapping(target = "prerequisites", ignore = true)
     Course courseCreateRequestToCourse(CourseCreateRequest courseCreateRequest);
