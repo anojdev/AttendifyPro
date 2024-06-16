@@ -1,6 +1,5 @@
 package edu.miu.attendifypro.repository;
 
-import edu.miu.attendifypro.domain.Course;
 import edu.miu.attendifypro.domain.LocationType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
