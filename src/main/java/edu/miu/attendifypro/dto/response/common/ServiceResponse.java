@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.dto;
+package edu.miu.attendifypro.dto.response.common;
 
 import edu.miu.attendifypro.domain.AppStatusCode;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package edu.miu.attendifypro.mapper;
 
 import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.dto.CourseCreateRequest;
-import edu.miu.attendifypro.dto.CourseDto;
-import edu.miu.attendifypro.dto.CourseUpdateRequest;
+import edu.miu.attendifypro.dto.response.CourseResponse;
+import edu.miu.attendifypro.dto.request.CourseCreateRequest;
+import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -17,8 +17,8 @@ public interface DtoMapper {
     DtoMapper dtoMapper =
             Mappers.getMapper(DtoMapper.class);
 
-    CourseDto courseToCourseDto(Course course);
-    Course courseDtoToCourse(CourseDto coursedto);
+    CourseResponse courseToCourseDto(Course course);
+    Course courseDtoToCourse(CourseResponse coursedto);
 
     @Mapping(target = "prerequisites", ignore = true)
     Course courseCreateRequestToCourse(CourseCreateRequest courseCreateRequest);

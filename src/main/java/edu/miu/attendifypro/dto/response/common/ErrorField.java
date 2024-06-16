@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.dto.common;
+package edu.miu.attendifypro.dto.response.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

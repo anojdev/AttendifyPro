@@ -1,12 +1,8 @@
-package edu.miu.attendifypro.dto.common;
+package edu.miu.attendifypro.dto.response.common;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 

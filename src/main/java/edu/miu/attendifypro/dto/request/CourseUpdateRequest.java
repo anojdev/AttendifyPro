@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.dto;
+package edu.miu.attendifypro.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

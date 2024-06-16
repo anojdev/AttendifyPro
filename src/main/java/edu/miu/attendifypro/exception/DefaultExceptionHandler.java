@@ -1,8 +1,8 @@
 package edu.miu.attendifypro.exception;
 
-import edu.miu.attendifypro.dto.common.ApiResponse;
-import edu.miu.attendifypro.dto.common.ErrorField;
-import edu.miu.attendifypro.dto.common.MessageErrorNode;
+import edu.miu.attendifypro.dto.response.common.ApiResponse;
+import edu.miu.attendifypro.dto.response.common.ErrorField;
+import edu.miu.attendifypro.dto.response.common.MessageErrorNode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

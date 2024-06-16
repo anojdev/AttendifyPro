@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.dto;
+package edu.miu.attendifypro.dto.request;
 
 import edu.miu.attendifypro.domain.Course;
 import jakarta.validation.constraints.NotBlank;

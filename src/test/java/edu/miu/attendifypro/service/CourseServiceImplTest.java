@@ -2,10 +2,10 @@ package edu.miu.attendifypro.service;
 
 import edu.miu.attendifypro.domain.AppStatusCode;
 import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.dto.CourseCreateRequest;
-import edu.miu.attendifypro.dto.CourseDto;
-import edu.miu.attendifypro.dto.CourseUpdateRequest;
-import edu.miu.attendifypro.dto.ServiceResponse;
+import edu.miu.attendifypro.dto.response.CourseResponse;
+import edu.miu.attendifypro.dto.request.CourseCreateRequest;
+import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
+import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class CourseServiceImplTest {
     private CourseServiceImpl courseService;
 
     private Course course;
-    private CourseDto courseDto;
+    private CourseResponse courseResponse;
     private CourseCreateRequest courseCreateRequest;
     private CourseUpdateRequest courseUpdateRequest;
     private List<Course> courseList;
@@ -49,10 +49,10 @@ class CourseServiceImplTest {
         course.setCourseCode("CS101");
         course.setCourseName("Introduction to Computer Science");
 
-        courseDto = new CourseDto();
-        courseDto.setId(1L);
-        courseDto.setCourseCode("CS101");
-        courseDto.setCourseName("Introduction to Computer Science");
+        courseResponse = new CourseResponse();
+        courseResponse.setId(1L);
+        courseResponse.setCourseCode("CS101");
+        courseResponse.setCourseName("Introduction to Computer Science");
 
         courseCreateRequest = new CourseCreateRequest();
         courseCreateRequest.setCourseCode("CS101");
@@ -70,7 +70,7 @@ class CourseServiceImplTest {
     void getAllCourses_Success() {
         when(persistenceService.findAll()).thenReturn(courseList);
 
-        ServiceResponse<List<CourseDto>> response = courseService.getAllCourses();
+        ServiceResponse<List<CourseResponse>> response = courseService.getAllCourses();
 
         assertEquals(AppStatusCode.S20000, response.getStatusCode());
         assertNotNull(response.getData());
@@ -82,7 +82,7 @@ class CourseServiceImplTest {
     void getAllCourses_Failure() {
         when(persistenceService.findAll()).thenThrow(new RuntimeException());
 
-        ServiceResponse<List<CourseDto>> response = courseService.getAllCourses();
+        ServiceResponse<List<CourseResponse>> response = courseService.getAllCourses();
 
         assertEquals(AppStatusCode.E50002, response.getStatusCode());
         verify(persistenceService, times(1)).findAll();
@@ -92,7 +92,7 @@ class CourseServiceImplTest {
     void getAccount_Success() {
         when(persistenceService.findById(1L)).thenReturn(Optional.of(course));
 
-        ServiceResponse<CourseDto> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
 
         assertEquals(AppStatusCode.S20005, response.getStatusCode());
         assertNotNull(response.getData());
@@ -103,7 +103,7 @@ class CourseServiceImplTest {
     void getAccount_NotFound() {
         when(persistenceService.findById(1L)).thenReturn(Optional.empty());
 
-        ServiceResponse<CourseDto> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
 
         assertEquals(AppStatusCode.E40004, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);
@@ -113,7 +113,7 @@ class CourseServiceImplTest {
     void getAccount_Failure() {
         when(persistenceService.findById(1L)).thenThrow(new RuntimeException());
 
-        ServiceResponse<CourseDto> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
 
         assertEquals(AppStatusCode.E50001, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);
@@ -124,7 +124,7 @@ class CourseServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         when(persistenceService.findAll(pageable)).thenReturn(coursePage);
 
-        ServiceResponse<Page<CourseDto>> response = courseService.getCoursePage(pageable);
+        ServiceResponse<Page<CourseResponse>> response = courseService.getCoursePage(pageable);
 
         assertEquals(AppStatusCode.S20000, response.getStatusCode());
         assertNotNull(response.getData());
@@ -136,7 +136,7 @@ class CourseServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         when(persistenceService.findAll(pageable)).thenThrow(new RuntimeException());
 
-        ServiceResponse<Page<CourseDto>> response = courseService.getCoursePage(pageable);
+        ServiceResponse<Page<CourseResponse>> response = courseService.getCoursePage(pageable);
 
         assertEquals(AppStatusCode.E50002, response.getStatusCode());
         verify(persistenceService, times(1)).findAll(pageable);
@@ -147,7 +147,7 @@ class CourseServiceImplTest {
         when(persistenceService.findByCourseCode(anyString())).thenReturn(Optional.empty());
         when(persistenceService.save(any(Course.class))).thenReturn(course);
 
-        ServiceResponse<CourseDto> response = courseService.createCourse(courseCreateRequest);
+        ServiceResponse<CourseResponse> response = courseService.createCourse(courseCreateRequest);
 
         assertEquals(AppStatusCode.S20001, response.getStatusCode());
         assertNotNull(response.getData());
@@ -159,7 +159,7 @@ class CourseServiceImplTest {
     void createCourse_CourseExists() {
         when(persistenceService.findByCourseCode(anyString())).thenReturn(Optional.of(course));
 
-        ServiceResponse<CourseDto> response = courseService.createCourse(courseCreateRequest);
+        ServiceResponse<CourseResponse> response = courseService.createCourse(courseCreateRequest);
 
         assertEquals(AppStatusCode.E40006, response.getStatusCode());
         verify(persistenceService, times(1)).findByCourseCode(anyString());
@@ -171,7 +171,7 @@ class CourseServiceImplTest {
         when(persistenceService.findByCourseCode(anyString())).thenReturn(Optional.empty());
         when(persistenceService.save(any(Course.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        ServiceResponse<CourseDto> response = courseService.createCourse(courseCreateRequest);
+        ServiceResponse<CourseResponse> response = courseService.createCourse(courseCreateRequest);
 
         assertEquals(AppStatusCode.E40002, response.getStatusCode());
         verify(persistenceService, times(1)).findByCourseCode(anyString());
@@ -183,7 +183,7 @@ class CourseServiceImplTest {
         when(persistenceService.findByCourseCode(anyString())).thenReturn(Optional.empty());
         when(persistenceService.save(any(Course.class))).thenThrow(new RuntimeException());
 
-        ServiceResponse<CourseDto> response = courseService.createCourse(courseCreateRequest);
+        ServiceResponse<CourseResponse> response = courseService.createCourse(courseCreateRequest);
 
         assertEquals(AppStatusCode.E50003, response.getStatusCode());
         verify(persistenceService, times(1)).findByCourseCode(anyString());
@@ -195,7 +195,7 @@ class CourseServiceImplTest {
         when(persistenceService.findById(1L)).thenReturn(Optional.of(course));
         when(persistenceService.save(any(Course.class))).thenReturn(course);
 
-        ServiceResponse<CourseDto> response = courseService.updateCourse(1L, courseUpdateRequest);
+        ServiceResponse<CourseResponse> response = courseService.updateCourse(1L, courseUpdateRequest);
 
         assertEquals(AppStatusCode.S20002, response.getStatusCode());
         assertNotNull(response.getData());
@@ -207,7 +207,7 @@ class CourseServiceImplTest {
     void updateCourse_NotFound() {
         when(persistenceService.findById(1L)).thenReturn(Optional.empty());
 
-        ServiceResponse<CourseDto> response = courseService.updateCourse(1L, courseUpdateRequest);
+        ServiceResponse<CourseResponse> response = courseService.updateCourse(1L, courseUpdateRequest);
 
         assertEquals(AppStatusCode.E40004, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);
@@ -219,7 +219,7 @@ class CourseServiceImplTest {
         when(persistenceService.findById(1L)).thenReturn(Optional.of(course));
         when(persistenceService.save(any(Course.class))).thenThrow(new RuntimeException());
 
-        ServiceResponse<CourseDto> response = courseService.updateCourse(1L, courseUpdateRequest);
+        ServiceResponse<CourseResponse> response = courseService.updateCourse(1L, courseUpdateRequest);
 
         assertEquals(AppStatusCode.E50002, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);

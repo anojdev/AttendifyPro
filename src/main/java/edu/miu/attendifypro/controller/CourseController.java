@@ -1,10 +1,10 @@
 package edu.miu.attendifypro.controller;
 
-import edu.miu.attendifypro.dto.CourseCreateRequest;
-import edu.miu.attendifypro.dto.CourseDto;
-import edu.miu.attendifypro.dto.CourseUpdateRequest;
-import edu.miu.attendifypro.dto.ServiceResponse;
-import edu.miu.attendifypro.dto.common.ApiResponse;
+import edu.miu.attendifypro.dto.response.CourseResponse;
+import edu.miu.attendifypro.dto.request.CourseCreateRequest;
+import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
+import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.service.CourseService;
 import edu.miu.attendifypro.service.MessagingService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,77 +31,77 @@ public class CourseController {
         this.messagingService = messagingService;
     }
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<CourseDto>>> getAllCourses() {
-        ServiceResponse<List<CourseDto>> serviceRsp= courseService.getAllCourses();
-        ApiResponse<List<CourseDto>> apiResponse = ApiResponse.<List<CourseDto>>builder().status(false)
+    public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses() {
+        ServiceResponse<List<CourseResponse>> serviceRsp= courseService.getAllCourses();
+        ApiResponse<List<CourseResponse>> apiResponse = ApiResponse.<List<CourseResponse>>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
-        return new ResponseEntity<ApiResponse<List<CourseDto>>>(apiResponse,
+        return new ResponseEntity<ApiResponse<List<CourseResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
     @GetMapping("")
-    public ResponseEntity<ApiResponse<Page<CourseDto>>> getCourses(Pageable pageableReq) {
+    public ResponseEntity<ApiResponse<Page<CourseResponse>>> getCourses(Pageable pageableReq) {
         Pageable pageable = PageRequest.of(pageableReq.getPageNumber()>0? pageableReq.getPageNumber()-1 : 0,
                 pageableReq.getPageSize() ,
                 pageableReq.getSort());
-        ServiceResponse<Page<CourseDto>> coursePage= courseService.getCoursePage(pageable);
-        ApiResponse<Page<CourseDto>> apiResponse = ApiResponse.<Page<CourseDto>>builder().status(false)
+        ServiceResponse<Page<CourseResponse>> coursePage= courseService.getCoursePage(pageable);
+        ApiResponse<Page<CourseResponse>> apiResponse = ApiResponse.<Page<CourseResponse>>builder().status(false)
                 .code(coursePage.getStatusCode().name()).build();
         if (coursePage.getData().isPresent()) {
             apiResponse.setData(coursePage.getData().get());
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(coursePage, new String[]{"course"}));
-        return new ResponseEntity<ApiResponse<Page<CourseDto>>>(apiResponse,
+        return new ResponseEntity<ApiResponse<Page<CourseResponse>>>(apiResponse,
                 coursePage.getStatusCode().getHttpStatusCode());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CourseDto>> getCourse(@PathVariable Long id,HttpServletRequest request) {
-        ServiceResponse<CourseDto> serviceRsp= courseService.getAccount(id);
-        ApiResponse<CourseDto> apiResponse = ApiResponse.<CourseDto>builder().status(false)
+    public ResponseEntity<ApiResponse<CourseResponse>> getCourse(@PathVariable Long id, HttpServletRequest request) {
+        ServiceResponse<CourseResponse> serviceRsp= courseService.getAccount(id);
+        ApiResponse<CourseResponse> apiResponse = ApiResponse.<CourseResponse>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
-        return new ResponseEntity<ApiResponse<CourseDto>>(apiResponse,
+        return new ResponseEntity<ApiResponse<CourseResponse>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CourseDto>> create(@Valid @RequestBody CourseCreateRequest courseCreateRequest,
-                                                       HttpServletRequest request) {
-        ServiceResponse<CourseDto> serviceRsp= courseService.createCourse(courseCreateRequest);
-        ApiResponse<CourseDto> apiResponse = ApiResponse.<CourseDto>builder().status(false)
+    public ResponseEntity<ApiResponse<CourseResponse>> create(@Valid @RequestBody CourseCreateRequest courseCreateRequest,
+                                                              HttpServletRequest request) {
+        ServiceResponse<CourseResponse> serviceRsp= courseService.createCourse(courseCreateRequest);
+        ApiResponse<CourseResponse> apiResponse = ApiResponse.<CourseResponse>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
-        return new ResponseEntity<ApiResponse<CourseDto>>(apiResponse,
+        return new ResponseEntity<ApiResponse<CourseResponse>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<CourseDto>> update(@Valid @RequestBody CourseUpdateRequest courseUpdateRequest,
-                                                         @PathVariable Long id,
-                                                         HttpServletRequest request) {
-        ServiceResponse<CourseDto> serviceRsp= courseService.updateCourse(id,courseUpdateRequest);
-        ApiResponse<CourseDto> apiResponse = ApiResponse.<CourseDto>builder().status(false)
+    public ResponseEntity<ApiResponse<CourseResponse>> update(@Valid @RequestBody CourseUpdateRequest courseUpdateRequest,
+                                                              @PathVariable Long id,
+                                                              HttpServletRequest request) {
+        ServiceResponse<CourseResponse> serviceRsp= courseService.updateCourse(id,courseUpdateRequest);
+        ApiResponse<CourseResponse> apiResponse = ApiResponse.<CourseResponse>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
-        return new ResponseEntity<ApiResponse<CourseDto>>(apiResponse,
+        return new ResponseEntity<ApiResponse<CourseResponse>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 

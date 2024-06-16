@@ -1,6 +1,6 @@
 package edu.miu.attendifypro.service;
 
-import edu.miu.attendifypro.dto.ServiceResponse;
+import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

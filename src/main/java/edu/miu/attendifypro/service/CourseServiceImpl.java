@@ -2,12 +2,13 @@ package edu.miu.attendifypro.service;
 
 import edu.miu.attendifypro.domain.AppStatusCode;
 import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.dto.CourseCreateRequest;
-import edu.miu.attendifypro.dto.CourseDto;
-import edu.miu.attendifypro.dto.CourseUpdateRequest;
-import edu.miu.attendifypro.dto.ServiceResponse;
+import edu.miu.attendifypro.dto.response.CourseResponse;
+import edu.miu.attendifypro.dto.request.CourseCreateRequest;
+import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
+import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.mapper.DtoMapper;
 import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,18 +26,18 @@ public class CourseServiceImpl implements CourseService{
 
 
     @Override
-    public ServiceResponse<List<CourseDto>> getAllCourses() {
+    public ServiceResponse<List<CourseResponse>> getAllCourses() {
         try {
             List<Course> courseList = persistenceService.findAll();
-            List<CourseDto> courseDtos=courseList.stream().map(DtoMapper.dtoMapper::courseToCourseDto).toList();
-            return ServiceResponse.of(courseDtos, AppStatusCode.S20000);
+            List<CourseResponse> courseResponses =courseList.stream().map(DtoMapper.dtoMapper::courseToCourseDto).toList();
+            return ServiceResponse.of(courseResponses, AppStatusCode.S20000);
         }
         catch (Exception e){
             return ServiceResponse.of(AppStatusCode.E50002);
         }
     }
 
-    public ServiceResponse<CourseDto> getAccount(Long id) {
+    public ServiceResponse<CourseResponse> getAccount(Long id) {
         try {
             Optional<Course> courseOpt = persistenceService.findById(id);
             if(courseOpt.isPresent()) {
@@ -52,10 +53,10 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public ServiceResponse<Page<CourseDto>> getCoursePage(Pageable pageable) {
+    public ServiceResponse<Page<CourseResponse>> getCoursePage(Pageable pageable) {
         try {
             Page<Course> coursePage = persistenceService.findAll(pageable);
-            Page<CourseDto> courseDtoPage = coursePage.map(DtoMapper.dtoMapper::courseToCourseDto);
+            Page<CourseResponse> courseDtoPage = coursePage.map(DtoMapper.dtoMapper::courseToCourseDto);
             return ServiceResponse.of(courseDtoPage, AppStatusCode.S20000);
         }
         catch (Exception e){
@@ -64,7 +65,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public ServiceResponse<CourseDto> createCourse(CourseCreateRequest courseCreateRequest) {
+    public ServiceResponse<CourseResponse> createCourse(CourseCreateRequest courseCreateRequest) {
         try {
             Optional<Course> existingCourse=persistenceService.findByCourseCode(courseCreateRequest.getCourseCode());
             if(existingCourse.isPresent()){
@@ -87,13 +88,16 @@ public class CourseServiceImpl implements CourseService{
             persistenceService.save(course);
             return ServiceResponse.of(DtoMapper.dtoMapper.courseToCourseDto(course),AppStatusCode.S20001);
 
-        }catch(Exception e){
+        }catch(DataIntegrityViolationException ex){
+            return ServiceResponse.of(AppStatusCode.E40002);
+        }
+        catch (Exception e){
             return ServiceResponse.of(AppStatusCode.E50003);
         }
     }
 
     @Override
-    public ServiceResponse<CourseDto> updateCourse(Long id,CourseUpdateRequest updateReq) {
+    public ServiceResponse<CourseResponse> updateCourse(Long id, CourseUpdateRequest updateReq) {
         Optional<Course> courseOpt=persistenceService.findById(id);
         if(courseOpt.isPresent()){
             List<Course> prerequisites=new ArrayList<>();
