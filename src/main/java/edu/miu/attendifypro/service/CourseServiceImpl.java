@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-@NoArgsConstructor(force = true)
 public class CourseServiceImpl implements CourseService{
 
     private final CoursePersistenceService persistenceService;

@@ -64,8 +64,6 @@ class CourseServiceImplTest {
 
         courseList = List.of(course);
         coursePage = new PageImpl<>(courseList);
-
-//        DtoMapper.dtoMapper = DtoMapper.dtoMapper; // Assume DtoMapperImpl is your mapper implementation
     }
 
     @Test
