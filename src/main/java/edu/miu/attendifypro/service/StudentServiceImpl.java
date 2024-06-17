@@ -66,6 +66,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ServiceResponse<StudentResponse> createStudent(StudentRequest studentRequest) {
+
+        Optional<Student> studentOpt=persistenceService.findByStudentId(studentRequest.getStudentId());
+        if(studentOpt.isPresent()){
+            return ServiceResponse.of(AppStatusCode.E40006,List.of("student.id.exists"));
+        }
+
         try {
             Student student = StudentDtoMapper.dtoMapper.studentRequestToStudent(studentRequest);
 
