@@ -14,7 +14,7 @@ public interface FacultyPersistenceService {
 
     Optional<Faculty> findById(Long id);
 
-    Faculty save(Faculty course);
+    Faculty save(Faculty faculty);
 
-    void delete(Faculty course);
+    void delete(Faculty faculty);
 }

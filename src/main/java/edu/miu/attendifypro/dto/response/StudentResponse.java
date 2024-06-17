@@ -16,7 +16,7 @@ public class StudentResponse {
     private LocalDate entry;
     private String studentId;
     private String applicantId;
-    private Faculty facultyAdvisor;
+    private FacultyResponse facultyAdvisor;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;

@@ -8,6 +8,7 @@ import edu.miu.attendifypro.dto.response.StudentResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.mapper.StudentDtoMapper;
 import edu.miu.attendifypro.repository.FacultyRepository;
+import edu.miu.attendifypro.service.persistence.FacultyPersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -21,11 +22,11 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentPersistenceService persistenceService;
 
-    FacultyRepository facultyRepository;
+    private final FacultyPersistenceService facultyPersistenceService;
 
-    public StudentServiceImpl(StudentPersistenceService persistenceService, FacultyRepository facultyRepository) {
+    public StudentServiceImpl(StudentPersistenceService persistenceService, FacultyPersistenceService facultyPersistenceService) {
         this.persistenceService = persistenceService;
-        this.facultyRepository = facultyRepository;
+        this.facultyPersistenceService = facultyPersistenceService;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             Student student = StudentDtoMapper.dtoMapper.studentRequestToStudent(studentRequest);
 
-            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
+            Optional<Faculty> facultyAdvisor = facultyPersistenceService.findById(studentRequest.getFacultyAdvisorId());
             facultyAdvisor.ifPresent(student::setFacultyAdvisor);
 
             persistenceService.save(student);
@@ -99,7 +100,7 @@ public class StudentServiceImpl implements StudentService {
                 student.setGender(studentUpdateRequest.getGender());
                 student.setBirthDate(studentUpdateRequest.getBirthDate());
 
-            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentUpdateRequest.getFacultyAdvisorId());
+            Optional<Faculty> facultyAdvisor = facultyPersistenceService.findById(studentUpdateRequest.getFacultyAdvisorId());
             facultyAdvisor.ifPresent(student::setFacultyAdvisor);
 
                 persistenceService.save(student);
