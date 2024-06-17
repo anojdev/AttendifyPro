@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-//public interface LocationService {
-//}
 
 public interface LocationService {
-//    ServiceResponse<LocationResponse> getAccount(Long id);
+    ServiceResponse<LocationResponse> getLocation(Long id);
 
     ServiceResponse<Page<LocationResponse>> getLocationPage(Pageable pageable);
 
