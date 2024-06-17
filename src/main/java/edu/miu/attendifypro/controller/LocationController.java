@@ -2,13 +2,9 @@ package edu.miu.attendifypro.controller;
 
 import edu.miu.attendifypro.dto.request.LocationCreateRequest;
 import edu.miu.attendifypro.dto.request.LocationUpdateRequest;
-import edu.miu.attendifypro.dto.response.CourseResponse;
-import edu.miu.attendifypro.dto.request.CourseCreateRequest;
-import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
 import edu.miu.attendifypro.dto.response.LocationResponse;
-import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
-import edu.miu.attendifypro.service.CourseService;
+import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.service.LocationService;
 import edu.miu.attendifypro.service.MessagingService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +23,6 @@ import java.util.List;
 public class LocationController {
     private final LocationService locationService;
 
-
     private final MessagingService messagingService;
 
     public LocationController(LocationService locationService, MessagingService messagingService) {
@@ -43,12 +38,12 @@ public class LocationController {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
-        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"location"}));
         return new ResponseEntity<ApiResponse<List<LocationResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
     @GetMapping("")
-    public ResponseEntity<ApiResponse<Page<LocationResponse>>> getCourses(Pageable pageableReq) {
+    public ResponseEntity<ApiResponse<Page<LocationResponse>>> getLocations(Pageable pageableReq) {
         Pageable pageable = PageRequest.of(pageableReq.getPageNumber()>0? pageableReq.getPageNumber()-1 : 0,
                 pageableReq.getPageSize() ,
                 pageableReq.getSort());
@@ -63,19 +58,19 @@ public class LocationController {
         return new ResponseEntity<ApiResponse<Page<LocationResponse>>>(apiResponse,
                 locationPage.getStatusCode().getHttpStatusCode());
     }
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ApiResponse<LocationResponse>> getCourse(@PathVariable Long id, HttpServletRequest request) {
-//        ServiceResponse<LocationResponse> serviceRsp= locationService.getAccount(id);
-//        ApiResponse<LocationResponse> apiResponse = ApiResponse.<LocationResponse>builder().status(false)
-//                .code(serviceRsp.getStatusCode().name()).build();
-//        if (serviceRsp.getData().isPresent()) {
-//            apiResponse.setData(serviceRsp.getData().get());
-//            apiResponse.setStatus(true);
-//        }
-//        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
-//        return new ResponseEntity<ApiResponse<LocationResponse>>(apiResponse,
-//                serviceRsp.getStatusCode().getHttpStatusCode());
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<LocationResponse>> getLocation(@PathVariable Long id, HttpServletRequest request) {
+        ServiceResponse<LocationResponse> serviceRsp= locationService.getLocation(id);
+        ApiResponse<LocationResponse> apiResponse = ApiResponse.<LocationResponse>builder().status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"location"}));
+        return new ResponseEntity<ApiResponse<LocationResponse>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+    }
 
     @PostMapping("")
     public ResponseEntity<ApiResponse<LocationResponse>> create(@Valid @RequestBody LocationCreateRequest locationCreateRequest,

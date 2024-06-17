@@ -16,10 +16,6 @@ public interface LocationPersistenceService {
 
     Optional<Location> findById(Long id);
 
-//    Optional<Location> findByCourseCode(String locationCode);
-
-    List<Location> findAllById(HashSet<Long> uniqueRequisiteIds);
-
     Location save(Location location);
 
     void delete(Location location);

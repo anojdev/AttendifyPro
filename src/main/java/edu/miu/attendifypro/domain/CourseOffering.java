@@ -28,17 +28,17 @@ public class CourseOffering {
 
     private String courseOfferingType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Location location;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Faculty faculty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Course courses;
 
     @Embedded
