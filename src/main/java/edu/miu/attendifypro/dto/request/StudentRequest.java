@@ -2,6 +2,7 @@ package edu.miu.attendifypro.dto.request;
 
 import edu.miu.attendifypro.domain.Faculty;
 import edu.miu.attendifypro.domain.auth.Account;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +29,8 @@ public class StudentRequest {
     @Size(max = 20, message = "{validation.name.size.exceed}")
     private String applicantId;
 
-    private String facultyAdvisorId;
+    @Column(name="id")
+    private Long facultyAdvisorId;
 
     @NotBlank(message = "should.not.be.empty")
     @NotNull(message = "{required}")
@@ -50,7 +52,5 @@ public class StudentRequest {
     private String email;
 
     private String gender;
-
-    private Account account;
 
 }

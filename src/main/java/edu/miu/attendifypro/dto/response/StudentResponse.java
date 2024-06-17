@@ -22,5 +22,4 @@ public class StudentResponse {
     private LocalDate birthDate;
     private String email;
     private String gender;
-    private Account account;
 }

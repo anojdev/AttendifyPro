@@ -1,11 +1,13 @@
 package edu.miu.attendifypro.service;
 
 import edu.miu.attendifypro.domain.AppStatusCode;
+import edu.miu.attendifypro.domain.Faculty;
 import edu.miu.attendifypro.domain.Student;
 import edu.miu.attendifypro.dto.request.StudentRequest;
 import edu.miu.attendifypro.dto.response.StudentResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.mapper.StudentDtoMapper;
+import edu.miu.attendifypro.repository.FacultyRepository;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,8 +21,11 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentPersistenceService persistenceService;
 
-    public StudentServiceImpl(StudentPersistenceService persistenceService) {
+    FacultyRepository facultyRepository;
+
+    public StudentServiceImpl(StudentPersistenceService persistenceService, FacultyRepository facultyRepository) {
         this.persistenceService = persistenceService;
+        this.facultyRepository = facultyRepository;
     }
 
     @Override
@@ -62,9 +67,10 @@ public class StudentServiceImpl implements StudentService {
     public ServiceResponse<StudentResponse> createStudent(StudentRequest studentRequest) {
         try {
             Student student = StudentDtoMapper.dtoMapper.studentRequestToStudent(studentRequest);
-            // Add this once faculty is implemented
-//            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
-//            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
+
+            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
+            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
+
             persistenceService.save(student);
             return ServiceResponse.of(StudentDtoMapper.dtoMapper.studentToStudentResponse(student),AppStatusCode.S20001);
 
@@ -92,11 +98,10 @@ public class StudentServiceImpl implements StudentService {
                 student.setEntry(studentUpdateRequest.getEntry());
                 student.setGender(studentUpdateRequest.getGender());
                 student.setBirthDate(studentUpdateRequest.getBirthDate());
-                student.setAccount(studentUpdateRequest.getAccount());
 
-                // Add this once faculty is implemented
-//            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
-//            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
+            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentUpdateRequest.getFacultyAdvisorId());
+            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
+
                 persistenceService.save(student);
                 return ServiceResponse.of(StudentDtoMapper.dtoMapper.studentToStudentResponse(student),AppStatusCode.S20002);
             }
