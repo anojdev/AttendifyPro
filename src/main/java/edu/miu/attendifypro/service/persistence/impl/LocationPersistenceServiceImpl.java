@@ -37,10 +37,6 @@ public class LocationPersistenceServiceImpl implements LocationPersistenceServic
         return locationRepository.findById(id);
     }
 
-//    @Override
-//    public Optional<Location> findByCourseCode(String courseCode) {
-//        return locationRepository.findByCourseCode(courseCode);
-//    }
 
     @Override
     public List<Location> findAllById(HashSet<Long> uniqueRequisiteIds) {
