@@ -20,9 +20,13 @@ public interface DtoMapper {
     CourseResponse courseToCourseDto(Course course);
     Course courseDtoToCourse(CourseResponse coursedto);
 
+
     @Mapping(target = "prerequisites", ignore = true)
     Course courseCreateRequestToCourse(CourseCreateRequest courseCreateRequest);
 
     @Mapping(target = "prerequisites", ignore = true)
     Course courseCreateRequestToCourse(CourseUpdateRequest courseUpdateRequest);
+
+    //Location DTO
+
 }
