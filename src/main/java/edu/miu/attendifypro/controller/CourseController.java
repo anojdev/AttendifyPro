@@ -61,7 +61,7 @@ public class CourseController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CourseResponse>> getCourse(@PathVariable Long id, HttpServletRequest request) {
-        ServiceResponse<CourseResponse> serviceRsp= courseService.getAccount(id);
+        ServiceResponse<CourseResponse> serviceRsp= courseService.getCourse(id);
         ApiResponse<CourseResponse> apiResponse = ApiResponse.<CourseResponse>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {

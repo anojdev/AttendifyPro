@@ -37,7 +37,7 @@ public class CourseServiceImpl implements CourseService{
         }
     }
 
-    public ServiceResponse<CourseResponse> getAccount(Long id) {
+    public ServiceResponse<CourseResponse> getCourse(Long id) {
         try {
             Optional<Course> courseOpt = persistenceService.findById(id);
             if(courseOpt.isPresent()) {
