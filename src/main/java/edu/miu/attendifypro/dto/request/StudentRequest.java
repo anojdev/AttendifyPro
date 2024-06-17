@@ -28,12 +28,13 @@ public class StudentRequest {
     @Size(max = 20, message = "{validation.name.size.exceed}")
     private String applicantId;
 
-    private Faculty facultyAdvisor;
+    private String facultyAdvisorId;
 
     @NotBlank(message = "should.not.be.empty")
     @NotNull(message = "{required}")
     @Size(max = 50, message = "{validation.name.size.exceed}")
     private String firstName;
+
 
     @NotBlank(message = "should.not.be.empty")
     @NotNull(message = "{required}")

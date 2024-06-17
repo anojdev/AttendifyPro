@@ -41,7 +41,7 @@ public class StudentController {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
-        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"course"}));
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"student"}));
         return new ResponseEntity<ApiResponse<List<StudentResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
@@ -50,16 +50,16 @@ public class StudentController {
         Pageable pageable = PageRequest.of(pageableReq.getPageNumber()>0? pageableReq.getPageNumber()-1 : 0,
                 pageableReq.getPageSize() ,
                 pageableReq.getSort());
-        ServiceResponse<Page<StudentResponse>> coursePage= studentService.getStudentPage(pageable);
+        ServiceResponse<Page<StudentResponse>> studentPage= studentService.getStudentPage(pageable);
         ApiResponse<Page<StudentResponse>> apiResponse = ApiResponse.<Page<StudentResponse>>builder().status(false)
-                .code(coursePage.getStatusCode().name()).build();
-        if (coursePage.getData().isPresent()) {
-            apiResponse.setData(coursePage.getData().get());
+                .code(studentPage.getStatusCode().name()).build();
+        if (studentPage.getData().isPresent()) {
+            apiResponse.setData(studentPage.getData().get());
             apiResponse.setStatus(true);
         }
-        apiResponse.setMessage(messagingService.getResponseMessage(coursePage, new String[]{"student"}));
+        apiResponse.setMessage(messagingService.getResponseMessage(studentPage, new String[]{"student"}));
         return new ResponseEntity<ApiResponse<Page<StudentResponse>>>(apiResponse,
-                coursePage.getStatusCode().getHttpStatusCode());
+                studentPage.getStatusCode().getHttpStatusCode());
     }
     @GetMapping("/{studentId}")
     public ResponseEntity<ApiResponse<StudentResponse>> getStudent(@PathVariable String studentId, HttpServletRequest request) {

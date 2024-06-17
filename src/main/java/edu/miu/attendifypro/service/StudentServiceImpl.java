@@ -7,8 +7,6 @@ import edu.miu.attendifypro.dto.response.StudentResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.mapper.StudentDtoMapper;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +17,6 @@ import java.util.*;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private static final Logger log = LoggerFactory.getLogger(StudentServiceImpl.class);
     private final StudentPersistenceService persistenceService;
 
     public StudentServiceImpl(StudentPersistenceService persistenceService) {
@@ -65,6 +62,9 @@ public class StudentServiceImpl implements StudentService {
     public ServiceResponse<StudentResponse> createStudent(StudentRequest studentRequest) {
         try {
             Student student = StudentDtoMapper.dtoMapper.studentRequestToStudent(studentRequest);
+            // Add this once faculty is implemented
+//            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
+//            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
             persistenceService.save(student);
             return ServiceResponse.of(StudentDtoMapper.dtoMapper.studentToStudentResponse(student),AppStatusCode.S20001);
 
@@ -92,8 +92,11 @@ public class StudentServiceImpl implements StudentService {
                 student.setEntry(studentUpdateRequest.getEntry());
                 student.setGender(studentUpdateRequest.getGender());
                 student.setBirthDate(studentUpdateRequest.getBirthDate());
-                student.setFacultyAdvisor(studentUpdateRequest.getFacultyAdvisor());
                 student.setAccount(studentUpdateRequest.getAccount());
+
+                // Add this once faculty is implemented
+//            Optional<Faculty> facultyAdvisor = facultyRepository.findById(studentRequest.getFacultyAdvisorId());
+//            facultyAdvisor.ifPresent(student::setFacultyAdvisor);
                 persistenceService.save(student);
                 return ServiceResponse.of(StudentDtoMapper.dtoMapper.studentToStudentResponse(student),AppStatusCode.S20002);
             }
