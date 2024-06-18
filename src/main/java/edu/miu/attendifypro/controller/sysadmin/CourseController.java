@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.controller;
+package edu.miu.attendifypro.controller.sysadmin;
 
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.request.CourseCreateRequest;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/sys-admin/course")
 @CrossOrigin
 public class CourseController {
     private final CourseService courseService;

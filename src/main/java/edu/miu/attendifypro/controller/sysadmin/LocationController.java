@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.controller;
+package edu.miu.attendifypro.controller.sysadmin;
 
 import edu.miu.attendifypro.dto.request.LocationCreateRequest;
 import edu.miu.attendifypro.dto.request.LocationUpdateRequest;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/location")
+@RequestMapping("/sys-admin/location")
 @CrossOrigin
 public class LocationController {
     private final LocationService locationService;

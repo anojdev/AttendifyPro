@@ -1,4 +1,4 @@
-package edu.miu.attendifypro.controller;
+package edu.miu.attendifypro.controller.sysadmin;
 
 import edu.miu.attendifypro.dto.request.StudentRequest;
 import edu.miu.attendifypro.dto.response.StudentResponse;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/sys-admin/student")
 @CrossOrigin
 public class StudentController {
     private static final Logger log = LoggerFactory.getLogger(StudentController.class);
