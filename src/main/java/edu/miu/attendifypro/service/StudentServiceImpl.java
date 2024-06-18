@@ -93,7 +93,7 @@ public class StudentServiceImpl implements StudentService {
     public ServiceResponse<StudentResponse> updateStudent(String id, StudentRequest studentUpdateRequest) {
         Optional<Student> studentOpt=persistenceService.findByStudentId(id);
         if(studentOpt.isEmpty()){
-            return ServiceResponse.of(AppStatusCode.E40006,List.of("student.id.doesn't.exists"));
+            return ServiceResponse.of(AppStatusCode.E40004,List.of("student.id.doesn't.exists"));
         }
 
             try {
