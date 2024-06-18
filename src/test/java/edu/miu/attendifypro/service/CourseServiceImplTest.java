@@ -92,7 +92,7 @@ class CourseServiceImplTest {
     void getAccount_Success() {
         when(persistenceService.findById(1L)).thenReturn(Optional.of(course));
 
-        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getCourse(1L);
 
         assertEquals(AppStatusCode.S20005, response.getStatusCode());
         assertNotNull(response.getData());
@@ -103,7 +103,7 @@ class CourseServiceImplTest {
     void getAccount_NotFound() {
         when(persistenceService.findById(1L)).thenReturn(Optional.empty());
 
-        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getCourse(1L);
 
         assertEquals(AppStatusCode.E40004, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);
@@ -113,7 +113,7 @@ class CourseServiceImplTest {
     void getAccount_Failure() {
         when(persistenceService.findById(1L)).thenThrow(new RuntimeException());
 
-        ServiceResponse<CourseResponse> response = courseService.getAccount(1L);
+        ServiceResponse<CourseResponse> response = courseService.getCourse(1L);
 
         assertEquals(AppStatusCode.E50001, response.getStatusCode());
         verify(persistenceService, times(1)).findById(1L);

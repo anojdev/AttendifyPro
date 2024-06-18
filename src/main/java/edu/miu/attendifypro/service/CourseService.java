@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CourseService {
-    ServiceResponse<CourseResponse> getAccount(Long id);
+    ServiceResponse<CourseResponse> getCourse(Long id);
 
     ServiceResponse<Page<CourseResponse>> getCoursePage(Pageable pageable);
 
