@@ -5,13 +5,11 @@ import edu.miu.attendifypro.dto.request.CourseOfferingCreateRequest;
 import edu.miu.attendifypro.dto.request.CourseOfferingUpdateRequest;
 import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
+import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.mapper.CourseOfferingDtoMapper;
 import edu.miu.attendifypro.mapper.DtoMapper;
-import edu.miu.attendifypro.service.persistence.CourseOfferingPersistenceService;
-import edu.miu.attendifypro.service.persistence.CoursePersistenceService;
-import edu.miu.attendifypro.service.persistence.FacultyPersistenceService;
-import edu.miu.attendifypro.service.persistence.LocationPersistenceService;
+import edu.miu.attendifypro.service.persistence.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,15 +26,18 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
     private final CoursePersistenceService coursePersistenceService;
     private final FacultyPersistenceService facultyPersistenceService;
     private final LocationPersistenceService locationPersistenceService;
+    private final StudentCourseSelectionPersistenceService studentCoursePersistence;
 
     public CourseOfferingServiceImpl(CourseOfferingPersistenceService persistenceService,
                                      CoursePersistenceService coursePersistenceService,
                                      FacultyPersistenceService facultyPersistenceService,
-                                     LocationPersistenceService locationPersistenceService) {
+                                     LocationPersistenceService locationPersistenceService,
+                                     StudentCourseSelectionPersistenceService studentCoursePersistence) {
         this.persistenceService = persistenceService;
         this.coursePersistenceService = coursePersistenceService;
         this.facultyPersistenceService = facultyPersistenceService;
         this.locationPersistenceService = locationPersistenceService;
+        this.studentCoursePersistence=studentCoursePersistence;
     }
 
     @Override
@@ -198,6 +199,20 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         }
         catch (Exception e){
             return ServiceResponse.of(AppStatusCode.E50003);
+        }
+    }
+
+    @Override
+    public ServiceResponse<List<StudentCourseSelectionResponse>> getStudentCourseOfferingById(long offeringId) {
+        try{
+            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentIdAndCourseOfferingId("617595",offeringId);
+            List<StudentCourseSelectionResponse> responseList =lst.stream()
+                    .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
+                            ::studentCourseSelectionToResponse).toList();
+            return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (Exception e){
+            return ServiceResponse.of(AppStatusCode.E50002);
         }
     }
 }
