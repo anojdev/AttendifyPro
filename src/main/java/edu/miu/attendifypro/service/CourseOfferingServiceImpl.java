@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
@@ -67,6 +69,42 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
     }
 
     @Override
+    public ServiceResponse<CourseOfferingResponse> getCourseOfferingById(long id) {
+        try {
+            Optional<CourseOffering> courseOffering = persistenceService.findById(id);
+            if(courseOffering.isEmpty()){
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("not.found","Course offering "));
+            }
+            return ServiceResponse.of(CourseOfferingDtoMapper.courseOfferingDtoMapper
+                    .courseOfferingToCourseOfferingResponse(courseOffering.get()),AppStatusCode.S20001);
+        }
+        catch (Exception e){
+            return ServiceResponse.of(AppStatusCode.E50002);
+        }
+    }
+    @Override
+    public ServiceResponse<List<CourseOfferingResponse>> filterCourseOffering(String date) {
+        try {
+            LocalDate localDate=null;
+            if(date!=null && !date.isEmpty())
+                localDate = LocalDate.parse(date);
+
+            List<CourseOffering> lst = persistenceService.filterCourseOffering(localDate);
+            List<CourseOfferingResponse> responseList =lst.stream()
+                    .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
+                            ::courseOfferingToCourseOfferingResponse).toList();
+            return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (DateTimeParseException e) {
+            return ServiceResponse.of(AppStatusCode.E40002,List.of("date.parse.error"));
+        }
+        catch (Exception e){
+            return ServiceResponse.of(AppStatusCode.E50002);
+        }
+
+    }
+
+    @Override
     public ServiceResponse<CourseOfferingResponse> createCourseOffering(CourseOfferingCreateRequest createRequest) {
         try {
             CourseOffering courseOffering = CourseOfferingDtoMapper.courseOfferingDtoMapper
@@ -74,19 +112,19 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
 
             Optional<Course> course=coursePersistenceService.findById(createRequest.getCourseId());
             if(course.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("course.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("course.not.exists"));
             }
             courseOffering.setCourses(course.get());
 
             Optional<Location> location=locationPersistenceService.findById(createRequest.getLocationId());
             if(location.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("location.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("location.not.exists"));
             }
             courseOffering.setLocation(location.get());
 
             Optional<Faculty> faculty=facultyPersistenceService.findById(createRequest.getFacultyId());
             if(faculty.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("faculty.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("faculty.not.exists"));
             }
             courseOffering.setFaculty(faculty.get());
             persistenceService.save(courseOffering);
@@ -107,7 +145,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         try {
             Optional<CourseOffering> courseOfferingById=persistenceService.findById(id);
             if(courseOfferingById.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("not.found","Course Offering"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("not.found","Course Offering"));
             }
             CourseOffering courseOffering=courseOfferingById.get();
             courseOffering.setCapacity(updateRequest.getCapacity());
@@ -117,19 +155,19 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
 
             Optional<Course> course=coursePersistenceService.findById(updateRequest.getCourseId());
             if(course.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("course.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("course.not.exists"));
             }
             courseOffering.setCourses(course.get());
 
             Optional<Location> location=locationPersistenceService.findById(updateRequest.getLocationId());
             if(location.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("location.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("location.not.exists"));
             }
             courseOffering.setLocation(location.get());
 
             Optional<Faculty> faculty=facultyPersistenceService.findById(updateRequest.getFacultyId());
             if(faculty.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("faculty.not.exists"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("faculty.not.exists"));
             }
             courseOffering.setFaculty(faculty.get());
             persistenceService.save(courseOffering);
@@ -150,7 +188,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         try {
             Optional<CourseOffering> courseOfferingById=persistenceService.findById(id);
             if(courseOfferingById.isEmpty()){
-                return ServiceResponse.of(AppStatusCode.E40006,List.of("not.found","Course Offering"));
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("not.found","Course Offering"));
             }
             persistenceService.delete(courseOfferingById.get());
             return ServiceResponse.of(true,AppStatusCode.S20001);

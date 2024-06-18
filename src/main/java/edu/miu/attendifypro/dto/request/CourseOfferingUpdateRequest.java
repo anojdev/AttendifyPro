@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseOfferingUpdateRequest {
-    @Size(min=1, message = "{validation.name.size.exceed}")
     private int capacity;
 
     @NotBlank(message = "{should.not.be.empty}")
