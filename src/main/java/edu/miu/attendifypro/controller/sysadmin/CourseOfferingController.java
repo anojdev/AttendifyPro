@@ -49,6 +49,23 @@ public class CourseOfferingController {
                 serviceRsp.getStatusCode().getHttpStatusCode());
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseOfferingResponse>> getCourseOfferingById(@PathVariable Long id) {
+        ServiceResponse<CourseOfferingResponse> serviceRsp= courseOfferingService.getCourseOfferingById(id);
+        ApiResponse<CourseOfferingResponse> apiResponse = ApiResponse
+                .<CourseOfferingResponse>builder()
+                .status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
+        return new ResponseEntity<ApiResponse<CourseOfferingResponse>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+
+    }
     @PostMapping("")
     public ResponseEntity<ApiResponse<CourseOfferingResponse>> create(@Valid @RequestBody CourseOfferingCreateRequest createRequest,
                                                               HttpServletRequest request) {

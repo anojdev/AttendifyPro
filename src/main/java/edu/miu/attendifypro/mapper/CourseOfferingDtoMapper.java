@@ -26,11 +26,7 @@ public interface CourseOfferingDtoMapper {
     @Mapping(target = "location", ignore = true)
     CourseOffering courseOfferingCreateRequestToCourseOffering(CourseOfferingCreateRequest courseOffRequest);
 
-    CourseOfferingResponse courseOfferingToCourseOfferingResponse(CourseOffering courseOffering);
-//    Location locationDtoToLocation(LocationResponse locationdto);
-    FacultyResponse facultyToFacultyResponse(Faculty faculty);
 
-    CourseResponse courseToCourseDto(Course course);
-    Course courseDtoToCourse(CourseResponse coursedto);
-    LocationResponse locationToLocationDto(Location location);
+    CourseOfferingResponse courseOfferingToCourseOfferingResponse(CourseOffering courseOffering);
+    FacultyResponse facultyToFacultyResponse(Faculty faculty);
 }
