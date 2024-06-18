@@ -1,6 +1,7 @@
 package edu.miu.attendifypro.service;
 
 import edu.miu.attendifypro.domain.auth.Account;
+import edu.miu.attendifypro.domain.auth.Role;
 import edu.miu.attendifypro.service.persistence.AccountPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -9,9 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * @author kush
- */
+import java.util.stream.Collectors;
+
 @Service
 public class AccountServiceImpl implements UserDetailsService {
     @Autowired
@@ -25,7 +25,9 @@ public class AccountServiceImpl implements UserDetailsService {
         }
         return User.withUsername(account.getEmail())
                 .password(account.getPassword())
-                .roles(String.valueOf(account.getRoles()))
+                .roles(account.getRoles().stream()
+                        .map(Role::getCode)
+                        .collect(Collectors.joining(", ")))
                 .build();
     }
 }

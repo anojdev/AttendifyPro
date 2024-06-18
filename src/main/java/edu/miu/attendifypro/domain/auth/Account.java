@@ -29,7 +29,7 @@ public class Account {
     @Column(nullable = false)
     private boolean enabled;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @Embedded
