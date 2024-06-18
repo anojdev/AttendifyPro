@@ -22,7 +22,6 @@ import java.util.List;
 @RequestMapping("/sys-admin/student")
 @CrossOrigin
 public class StudentController {
-    private static final Logger log = LoggerFactory.getLogger(StudentController.class);
     private final StudentService studentService;
 
 
