@@ -22,4 +22,9 @@ public class AccountPersistenceServiceImpl implements AccountPersistenceService 
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
+
+    @Override
+    public Optional<Account> findByUsername(String username) {
+        return accountRepository.findByUsername(username);
+    }
 }

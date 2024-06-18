@@ -1,17 +1,18 @@
 package edu.miu.attendifypro.config;
 
+import edu.miu.attendifypro.domain.auth.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SecurityUser implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
-    private String userId;
+    private String id;
     private String username;
     private String password;
     private boolean accountNonExpired = true;
@@ -19,15 +20,19 @@ public class SecurityUser implements UserDetails {
     private boolean credentialsNonExpired = true;
     private boolean enabled;
 
-    public SecurityUser(String userId, String username, String password, Boolean enabled) {
-        this.authorities = new ArrayList<>();
-        this.userId = userId;
+    public SecurityUser(String email, String username, String password, Boolean enabled, List<Role> roles) {
+
+        this.id = email;
         this.username = username;
         this.password = password;
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = enabled;
+        // Can be improved
+        this.authorities =   roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getCode()))
+                .collect(Collectors.toList());
      }
 
     @Override
@@ -89,12 +94,12 @@ public class SecurityUser implements UserDetails {
         return authorities;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(String id) {
+        this.id = id;
     }
 
 }
