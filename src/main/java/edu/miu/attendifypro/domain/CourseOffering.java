@@ -28,7 +28,7 @@ public class CourseOffering {
 
     private String courseOfferingType;
 
-    @ManyToOne()
+    @ManyToOne
     private Location location;
 
     private LocalDate startDate;
