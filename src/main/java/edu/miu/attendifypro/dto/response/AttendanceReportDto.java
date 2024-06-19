@@ -19,4 +19,5 @@ public class AttendanceReportDto {
     private LocalDateTime scanDateTime;
     private LocalDate day;
     private boolean isPresent;
+    private String sessionTime;
 }
