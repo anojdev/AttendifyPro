@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Account {
+public class Account extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +32,5 @@ public class Account {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @Embedded
-    AuditInfo auditInfo;
 
 }

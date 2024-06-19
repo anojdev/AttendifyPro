@@ -14,12 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 
-public class LocationType {
+public class LocationType extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String type;
-    @Embedded
-    AuditInfo auditInfo;
+
 }

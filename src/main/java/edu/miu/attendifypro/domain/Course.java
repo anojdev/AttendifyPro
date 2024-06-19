@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Course {
+public class Course extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +38,5 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "prerequisite_id"))
     private List<Course> prerequisites;
 
-    @Embedded
-    AuditInfo auditInfo;
+
 }
