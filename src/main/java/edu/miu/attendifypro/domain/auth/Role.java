@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Role {
+public class Role extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +23,5 @@ public class Role {
 
     private String description;
 
-    @Embedded
-    AuditInfo auditInfo;
+
 }

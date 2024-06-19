@@ -1,28 +1,36 @@
 package edu.miu.attendifypro.service.persistence.impl;
 
 import edu.miu.attendifypro.domain.StudentCourseSelection;
-import edu.miu.attendifypro.repository.CourseOfferingRepository;
 import edu.miu.attendifypro.repository.StudentCourseSelectionRepository;
 import edu.miu.attendifypro.service.persistence.StudentCourseSelectionPersistenceService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class StudentCourseSelectionPersistenceServiceImpl implements StudentCourseSelectionPersistenceService {
-    private final StudentCourseSelectionRepository repository;
 
-    public StudentCourseSelectionPersistenceServiceImpl(StudentCourseSelectionRepository repository) {
-        this.repository = repository;
+    private final StudentCourseSelectionRepository studentCourseSelectionRepository;
+
+
+    public StudentCourseSelectionPersistenceServiceImpl(StudentCourseSelectionRepository studentCourseSelectionRepository) {
+        this.studentCourseSelectionRepository = studentCourseSelectionRepository;
     }
 
+    @Override
+    public List<StudentCourseSelection> getOfferingStartingInNDays(int n) {
+        LocalDate targetDate = LocalDate.now().minusDays(n);
+        return studentCourseSelectionRepository.getOfferingStartingInNDays(targetDate);
+    }
     public List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId){
-        return repository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
+        return studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
     }
 
     @Override
     public List<StudentCourseSelection> findByStudentId(String studentId) {
-        return repository.findByStudentId(studentId);
+        return studentCourseSelectionRepository.findByStudentId(studentId);
     }
 }

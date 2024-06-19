@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class CourseOffering {
+public class CourseOffering extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -40,9 +40,6 @@ public class CourseOffering {
 
     @ManyToOne
     private Course courses;
-
-    @Embedded
-    AuditInfo auditInfo;
 
 
     public List<Session> getSessions() {

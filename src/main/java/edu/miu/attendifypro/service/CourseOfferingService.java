@@ -8,6 +8,7 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.dto.response.report.Report1Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,8 @@ public interface CourseOfferingService {
 
     ServiceResponse<List<CourseOfferingResponse>> getAllCourseOfferings();
     ServiceResponse<CourseOfferingResponse> getCourseOfferingById(long id);
-    ServiceResponse<List<CourseOfferingResponse>> filterCourseOffering(String date);
 
+    ServiceResponse<List<CourseScheduleResponse>> getCoursesByDate(String date);
     ServiceResponse<CourseOfferingResponse> createCourseOffering(CourseOfferingCreateRequest createRequest);
 
     ServiceResponse<CourseOfferingResponse> updateCourseOffering(long id, CourseOfferingUpdateRequest updateRequest);

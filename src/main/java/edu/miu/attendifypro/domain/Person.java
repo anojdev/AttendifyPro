@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Person {
+public abstract class Person extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -34,7 +34,6 @@ public class Person {
     @OneToOne(fetch = FetchType.LAZY)
     private Account account;
 
-    @Embedded
-    AuditInfo auditInfo;
+
 
 }
