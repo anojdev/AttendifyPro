@@ -14,4 +14,5 @@ public class StudentCourseSelectionResponse {
     private CourseOfferingResponse courseOffering;
 
     private StudentResponse student;
+    private String grade;
 }

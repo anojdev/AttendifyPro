@@ -25,4 +25,6 @@ public class StudentCourseSelection {
     @JoinColumn
     private Student student;
 
+    private String grade;
+
 }

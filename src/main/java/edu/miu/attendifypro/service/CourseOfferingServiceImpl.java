@@ -215,4 +215,18 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
             return ServiceResponse.of(AppStatusCode.E50002);
         }
     }
+
+    @Override
+    public ServiceResponse<List<StudentCourseSelectionResponse>> getStudentCourseOffering() {
+        try{
+            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentId("617595");
+            List<StudentCourseSelectionResponse> responseList =lst.stream()
+                    .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
+                            ::studentCourseSelectionToResponse).toList();
+            return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (Exception e){
+            return ServiceResponse.of(AppStatusCode.E50002);
+        }
+    }
 }

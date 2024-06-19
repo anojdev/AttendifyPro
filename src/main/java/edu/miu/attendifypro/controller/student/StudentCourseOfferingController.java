@@ -24,7 +24,7 @@ public class StudentCourseOfferingController {
     }
 
     @GetMapping("/{offeringId}")
-    public ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>> getCourseOfferingAttendance(@PathVariable Long offeringId) {
+    public ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>> getCourseOfferingById(@PathVariable Long offeringId) {
         ServiceResponse<List<StudentCourseSelectionResponse>> serviceRsp= courseOfferingService.getStudentCourseOfferingById(offeringId);
 
         ApiResponse<List<StudentCourseSelectionResponse>> apiResponse = ApiResponse
@@ -39,4 +39,22 @@ public class StudentCourseOfferingController {
         return new ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>> getStudentCourseSelection() {
+        ServiceResponse<List<StudentCourseSelectionResponse>> serviceRsp= courseOfferingService.getStudentCourseOffering();
+
+        ApiResponse<List<StudentCourseSelectionResponse>> apiResponse = ApiResponse
+                .<List<StudentCourseSelectionResponse>>builder()
+                .status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
+        return new ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+    }
+
 }

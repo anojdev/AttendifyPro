@@ -28,4 +28,5 @@ public interface CourseOfferingService {
     ServiceResponse<Boolean> deleteCourseOffering(Long id);
 
     ServiceResponse<List<StudentCourseSelectionResponse>>  getStudentCourseOfferingById(long offeringId);
+    ServiceResponse<List<StudentCourseSelectionResponse>>  getStudentCourseOffering();
 }
