@@ -13,6 +13,13 @@ import java.util.Optional;
 @Repository
 public interface StudentCourseSelectionRepository extends JpaRepository<StudentCourseSelection,Long> {
 
+
+    @Query("SELECT DISTINCT s FROM StudentCourseSelection s " +
+            "JOIN FETCH s.student st " +
+            "JOIN FETCH s.courseOffering co " +
+            "WHERE st.studentId = :studentId")
+    List<StudentCourseSelection> findByStudentId(String studentId);
+
     @Query("SELECT DISTINCT s FROM StudentCourseSelection s " +
             "JOIN FETCH s.student st " +
             "JOIN FETCH s.courseOffering co " +
@@ -24,6 +31,7 @@ public interface StudentCourseSelectionRepository extends JpaRepository<StudentC
             "JOIN FETCH scs.courseOffering co " +
             "WHERE co.startDate > :targetDate")
     List<StudentCourseSelection> getOfferingStartingInNDays(LocalDate targetDate);
+
 
 
 }

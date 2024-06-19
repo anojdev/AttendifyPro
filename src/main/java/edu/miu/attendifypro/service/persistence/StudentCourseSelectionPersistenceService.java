@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface StudentCourseSelectionPersistenceService {
     List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId);
+
+    List<StudentCourseSelection> findByStudentId(String studentId);
     List<StudentCourseSelection> getOfferingStartingInNDays(int i);
 
 }

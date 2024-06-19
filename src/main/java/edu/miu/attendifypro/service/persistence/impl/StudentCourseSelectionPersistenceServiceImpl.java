@@ -29,4 +29,9 @@ public class StudentCourseSelectionPersistenceServiceImpl implements StudentCour
         var d = studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
         return d;
     }
+
+    @Override
+    public List<StudentCourseSelection> findByStudentId(String studentId) {
+        return studentCourseSelectionRepository.findByStudentId(studentId);
+    }
 }
