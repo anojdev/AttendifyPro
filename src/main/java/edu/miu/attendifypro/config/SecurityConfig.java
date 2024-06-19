@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-  .authorizeHttpRequests((authorize) ->
+           .authorizeHttpRequests((authorize) ->
             authorize.requestMatchers("/sys-admin/**").hasAnyRole("SYSADMIN")
                     .requestMatchers("/student-view/**").hasAnyRole("STUDENT")
                     .requestMatchers("/admin-view/**").hasAnyRole("STAFF","FACULTY","SYSADMIN")

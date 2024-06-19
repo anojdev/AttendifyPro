@@ -111,7 +111,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 }
             }
 
-            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent,sessionStart.format(sessionFormatter)+"-"+sessionEnd.format(sessionFormatter));
+            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent,
+                    sessionStart.format(sessionFormatter)+"-"+sessionEnd.format(sessionFormatter));
             reportList.add(reportDto);
         }
 

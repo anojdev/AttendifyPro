@@ -1,7 +1,6 @@
 package edu.miu.attendifypro.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
@@ -27,8 +26,6 @@ public class AuditInfo {
     @LastModifiedDate
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
-//    private String createdBy;
-//    private String updatedBy;
 
     @CreatedBy
     String createdBy;

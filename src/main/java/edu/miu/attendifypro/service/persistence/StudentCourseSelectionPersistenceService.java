@@ -12,4 +12,8 @@ public interface StudentCourseSelectionPersistenceService {
     List<StudentCourseSelection> getOfferingStartingInNDays(int i);
     List<Student> findStudentByOfferingId(long id);
 
+    StudentCourseSelection save(StudentCourseSelection courseSelection);
+
+//    StudentCourseSelection save(StudentCourseSelection scs);
+
 }

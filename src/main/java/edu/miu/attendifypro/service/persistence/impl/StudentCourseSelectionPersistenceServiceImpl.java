@@ -32,6 +32,11 @@ public class StudentCourseSelectionPersistenceServiceImpl implements StudentCour
         return studentCourseSelectionRepository.findStudentsByCouseOfferingId(id);
     }
 
+    @Override
+    public StudentCourseSelection save(StudentCourseSelection courseSelection) {
+        return studentCourseSelectionRepository.save(courseSelection);
+    }
+
     public List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId){
         return studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
     }
