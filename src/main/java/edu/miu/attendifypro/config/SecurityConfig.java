@@ -32,6 +32,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
   .authorizeHttpRequests((authorize) ->
             authorize.requestMatchers("/sys-admin/**").hasAnyRole("SYSADMIN")
+                    .requestMatchers("/student-view/**").hasAnyRole("STUDENT")
+                    .requestMatchers("/admin-view/**").hasAnyRole("STAFF","FACULTY","SYSADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
@@ -54,7 +56,7 @@ public class SecurityConfig {
 
             String username = authentication.getPrincipal() + "";
             String password = authentication.getCredentials() + "";
-            UserDetails user = userDetailsService.loadUserByUsername(username);
+            SecurityUser user = (SecurityUser) userDetailsService.loadUserByUsername(username);
             if (!encoder.matches(password, user.getPassword())) {
                 throw new BadCredentialsException("Bad credentials");
             }

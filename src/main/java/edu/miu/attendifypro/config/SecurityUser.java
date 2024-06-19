@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class SecurityUser implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
-    private String id;
+    private Long id;
     private String username;
     private String password;
     private boolean accountNonExpired = true;
@@ -20,18 +20,17 @@ public class SecurityUser implements UserDetails {
     private boolean credentialsNonExpired = true;
     private boolean enabled;
 
-    public SecurityUser(String email, String username, String password, Boolean enabled, List<Role> roles) {
+    public SecurityUser(Long id,String username, String password, Boolean enabled, List<String> roles) {
 
-        this.id = email;
+        this.id = id;
         this.username = username;
         this.password = password;
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = enabled;
-        // Can be improved
         this.authorities =   roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getCode()))
+                .map(x-> new SimpleGrantedAuthority("ROLE_" + x))
                 .collect(Collectors.toList());
      }
 
@@ -94,11 +93,11 @@ public class SecurityUser implements UserDetails {
         return authorities;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setUserId(String id) {
+    public void setUserId(Long id) {
         this.id = id;
     }
 

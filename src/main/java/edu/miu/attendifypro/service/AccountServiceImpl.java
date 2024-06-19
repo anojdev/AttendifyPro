@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,27 +23,16 @@ public class AccountServiceImpl implements  UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-//        Account account = persistenceService.findByEmail(email);
-        Optional<Account> account = persistenceService.findByUsername(userName);
-        if (account.isEmpty()) {
+        Optional<Account> accountOpt = persistenceService.findByUsername(userName);
+        if (accountOpt.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
+        Account account=accountOpt.get();
+        List<String> roles=account.getRoles().stream()
+                .map(Role::getCode)
+                .toList();
+        return new SecurityUser(account.getId(), account.getUsername(),
+                account.getPassword(), account.isEnabled(), roles);
 
-        Role accountRoles =  account.get().getRoles().iterator().hasNext() ? account.get().getRoles().iterator().next() : null;
-//                user.get().getSystemRoles().iterator().hasNext() ? user.get().getSystemRoles().iterator().next() : null;
-
-        return  new SecurityUser(account.get().getEmail(), account.get().getUsername(), account.get().getPassword(), account.get().isEnabled(),
-             account.get().getRoles());
-//        return new SecurityUser(account.getId(),
-//                account.getUsername(),
-//                account.getPassword(),
-////                account.isEnabled() == true,
-//                accountRoles);
-//        return User.withUsername(account.getEmail())
-//                .password(account.getPassword())
-//                .roles(account.getRoles().stream()
-//                        .map(Role::getCode)
-//                        .collect(Collectors.joining(", ")))
-//                .build();
     }
 }

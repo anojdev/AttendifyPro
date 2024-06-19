@@ -12,8 +12,8 @@ public class ContextUser {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    public UserDetails getUser() {
-        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public SecurityUser getUser() {
+        return (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
