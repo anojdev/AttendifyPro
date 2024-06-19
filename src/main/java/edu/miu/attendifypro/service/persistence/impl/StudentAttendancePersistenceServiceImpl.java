@@ -41,4 +41,9 @@ public class StudentAttendancePersistenceServiceImpl implements StudentAttendanc
                 courseOffering.getStartDate().atStartOfDay(),
                 courseOffering.getEndDate().atTime(LocalTime.MAX),studentId);
     }
+
+    @Override
+    public List<StudentAttendanceRecord> getSingleStudentAttendanceRecords(Long studentId) {
+        return repository.findByStudentId(studentId);
+    }
 }

@@ -28,5 +28,8 @@ public interface StudentAttendanceRecordRepository extends JpaRepository<Student
                                                            @Param("endDateTime") LocalDateTime endDateTime,
                                                            @Param("studentId") Long studentId);
 
+    @Query("select sa from  StudentAttendanceRecord sa inner join sa.student s where s.id = :studentId")
+    List<StudentAttendanceRecord> findByStudentId(Long studentId);
+
 
 }
