@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface StudentCourseSelectionPersistenceService {
     List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId);
+
+    List<StudentCourseSelection> findByStudentId(String studentId);
 }

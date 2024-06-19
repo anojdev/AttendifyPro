@@ -3,12 +3,15 @@ package edu.miu.attendifypro.service;
 import edu.miu.attendifypro.domain.AppStatusCode;
 import edu.miu.attendifypro.domain.Faculty;
 import edu.miu.attendifypro.domain.Student;
+import edu.miu.attendifypro.domain.StudentCourseSelection;
 import edu.miu.attendifypro.dto.request.StudentRequest;
 import edu.miu.attendifypro.dto.response.StudentResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.mapper.DtoMapper;
 import edu.miu.attendifypro.mapper.StudentDtoMapper;
 import edu.miu.attendifypro.repository.FacultyRepository;
 import edu.miu.attendifypro.service.persistence.FacultyPersistenceService;
+import edu.miu.attendifypro.service.persistence.StudentCourseSelectionPersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -24,9 +27,13 @@ public class StudentServiceImpl implements StudentService {
 
     private final FacultyPersistenceService facultyPersistenceService;
 
-    public StudentServiceImpl(StudentPersistenceService persistenceService, FacultyPersistenceService facultyPersistenceService) {
+    private final StudentCourseSelectionPersistenceService studentCourseSelectionPersistenceService;
+
+    public StudentServiceImpl(StudentPersistenceService persistenceService, FacultyPersistenceService facultyPersistenceService,
+                              StudentCourseSelectionPersistenceService studentCourseSelectionPersistenceService) {
         this.persistenceService = persistenceService;
         this.facultyPersistenceService = facultyPersistenceService;
+        this.studentCourseSelectionPersistenceService = studentCourseSelectionPersistenceService;
     }
 
     @Override
@@ -45,7 +52,19 @@ public class StudentServiceImpl implements StudentService {
     public ServiceResponse<StudentResponse> getStudent(String studentId) {
         try {
             Optional<Student> studentOpt = persistenceService.findByStudentId(studentId);
-            return studentOpt.map(student -> ServiceResponse.of(StudentDtoMapper.dtoMapper.studentToStudentResponse(student), AppStatusCode.S20005)).orElseGet(() -> ServiceResponse.of(AppStatusCode.E40004));
+            if(studentOpt.isPresent()) {
+
+                StudentResponse studentDTO = StudentDtoMapper.dtoMapper.studentToStudentResponse(studentOpt.get());
+
+                List<StudentCourseSelection> courseSelections = studentCourseSelectionPersistenceService.findByStudentId(studentId);
+                studentDTO.setCourses(StudentDtoMapper.dtoMapper.courseSelectionsToCourseDTOs(courseSelections));
+
+                return ServiceResponse.of(studentDTO, AppStatusCode.S20005);
+            }
+            else{
+                return ServiceResponse.of(AppStatusCode.E40004);
+            }
+
         }
         catch (Exception e){
             return ServiceResponse.of(AppStatusCode.E50001);
@@ -93,7 +112,7 @@ public class StudentServiceImpl implements StudentService {
     public ServiceResponse<StudentResponse> updateStudent(String id, StudentRequest studentUpdateRequest) {
         Optional<Student> studentOpt=persistenceService.findByStudentId(id);
         if(studentOpt.isEmpty()){
-            return ServiceResponse.of(AppStatusCode.E40004,List.of("student.id.doesn't.exists"));
+            return ServiceResponse.of(AppStatusCode.E40006,List.of("student.id.doesn't.exists"));
         }
 
             try {
