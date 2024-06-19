@@ -13,5 +13,5 @@ public class StudentAttendanceRecordResponse {
     private Long id;
     private LocalDateTime scanDateTime;
     private StudentResponse student;
-    private LocationResponse location;
+//    private LocationResponse location;
 }
