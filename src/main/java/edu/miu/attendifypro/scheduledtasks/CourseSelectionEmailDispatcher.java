@@ -36,9 +36,9 @@ public class CourseSelectionEmailDispatcher {
     }
 
 
-    @Scheduled(initialDelay = 10L,fixedDelayString = "#{${app.email.course-welcome.dispatch.interval:1} * 1000*60}")
+//    @Scheduled(initialDelay = 10L,fixedDelayString = "#{${app.email.course-welcome.dispatch.interval:1} * 1000*60}")
     public void dispatchWelcomeEmails(){
-        List<StudentCourseSelection> courseSelections=persistenceService.getOfferingStartingInNDays(1);
+        List<StudentCourseSelection> courseSelections=persistenceService.getOfferingStartingInNDays(7);
         for (StudentCourseSelection courseSelection : courseSelections) {
             EmailObject object = new EmailObject();
             object.setFrom(courseSelection.getCourseOffering().getFaculty().getEmail());

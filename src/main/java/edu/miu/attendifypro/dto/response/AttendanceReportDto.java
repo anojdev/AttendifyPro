@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceReportDto {
-    private Long studentId;
+    private String studentId;
     private String studentName;
     private LocalDateTime scanDateTime;
     private LocalDate day;

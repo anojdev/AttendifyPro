@@ -58,6 +58,7 @@ public class CourseOffering extends AuditInfo {
 
             currentDate = currentDate.plusDays(1);
         }
+        sessions.removeLast();
         return sessions;
     }
 

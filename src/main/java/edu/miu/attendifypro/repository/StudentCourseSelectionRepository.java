@@ -27,6 +27,6 @@ public interface StudentCourseSelectionRepository extends JpaRepository<StudentC
     @Query("SELECT scs FROM StudentCourseSelection scs " +
             "JOIN FETCH scs.student s " +
             "JOIN FETCH scs.courseOffering co " +
-            "WHERE co.startDate > :targetDate")
+            "WHERE co.startDate > :targetDate AND scs.isNotified=false")
     List<StudentCourseSelection> getOfferingStartingInNDays(LocalDate targetDate);
 }

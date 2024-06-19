@@ -26,4 +26,6 @@ public class StudentCourseSelection {
     private Student student;
     private String grade;
 
+    private boolean isNotified;
+
 }

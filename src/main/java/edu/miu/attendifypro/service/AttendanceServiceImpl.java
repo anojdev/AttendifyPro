@@ -7,20 +7,14 @@ import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.service.persistence.CourseOfferingPersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentAttendancePersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
-import org.antlr.v4.runtime.misc.Triple;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -82,10 +76,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<AttendanceReportDto> generateAttendanceReport(List<StudentAttendanceRecord> attendanceRecords, List<Session> sessions) {
         List<AttendanceReportDto> reportList = new ArrayList<>();
 
+        DateTimeFormatter sessionFormatter = DateTimeFormatter.ofPattern("HH:mm");
         for (StudentAttendanceRecord record : attendanceRecords) {
             LocalDateTime scanDateTime = record.getScanDateTime();
             LocalDate scanDate = scanDateTime.toLocalDate();
-            Long studentId = record.getStudent().getId();
+            String studentId = record.getStudent().getStudentId();
             String studentName = record.getStudent().getFirstName()+" "+record.getStudent().getLastName();
 
             boolean isPresent = false;
@@ -96,13 +91,13 @@ public class AttendanceServiceImpl implements AttendanceService {
                 sessionEnd = session.getEndDateTime();
                 LocalDate sessionDate = sessionStart.toLocalDate();
 
-                if (scanDate.equals(sessionDate) && !scanDateTime.isBefore(sessionStart) && !scanDateTime.isAfter(sessionEnd)) {
+                if (scanDate.equals(sessionDate) && !scanDateTime.isBefore(sessionStart.minusMinutes(15)) && !scanDateTime.isAfter(sessionEnd)) {
                     isPresent = true;
                     break;
                 }
             }
 
-            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent,sessionStart+"-"+sessionEnd);
+            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent,sessionStart.format(sessionFormatter)+"-"+sessionEnd.format(sessionFormatter));
             reportList.add(reportDto);
         }
 
@@ -119,7 +114,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         Row header = sheet.createRow(0);
 
         CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+        headerStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         XSSFFont font = ((XSSFWorkbook) workbook).createFont();
@@ -137,14 +132,18 @@ public class AttendanceServiceImpl implements AttendanceService {
         headerCell.setCellStyle(headerStyle);
 
         headerCell = header.createCell(2);
-        headerCell.setCellValue("Scan Date Time");
+        headerCell.setCellValue("Session");
         headerCell.setCellStyle(headerStyle);
 
         headerCell = header.createCell(3);
-        headerCell.setCellValue("Day");
+        headerCell.setCellValue("Scan Date Time");
         headerCell.setCellStyle(headerStyle);
 
         headerCell = header.createCell(4);
+        headerCell.setCellValue("Date");
+        headerCell.setCellStyle(headerStyle);
+
+        headerCell = header.createCell(5);
         headerCell.setCellValue("Present");
         headerCell.setCellStyle(headerStyle);
 
@@ -153,6 +152,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         int rowIndex = 1;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         for (AttendanceReportDto attendanceReportDto : attendanceReportDtos) {
             Row row = sheet.createRow(rowIndex++);
@@ -166,14 +166,18 @@ public class AttendanceServiceImpl implements AttendanceService {
             cell.setCellStyle(style);
 
             cell = row.createCell(2);
-            cell.setCellValue(attendanceReportDto.getScanDateTime().format(dateTimeFormatter));
+            cell.setCellValue(attendanceReportDto.getSessionTime());
             cell.setCellStyle(style);
 
             cell = row.createCell(3);
-            cell.setCellValue(attendanceReportDto.getDay());
+            cell.setCellValue(attendanceReportDto.getScanDateTime().format(dateTimeFormatter));
             cell.setCellStyle(style);
 
             cell = row.createCell(4);
+            cell.setCellValue(attendanceReportDto.getDay().format(dateFormatter));
+            cell.setCellStyle(style);
+
+            cell = row.createCell(5);
             cell.setCellValue(attendanceReportDto.isPresent() ? "Y" : "N");
             cell.setCellStyle(style);
         }
