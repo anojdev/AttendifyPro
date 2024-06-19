@@ -1,6 +1,7 @@
-package edu.miu.attendifypro.controller.admin;
+package edu.miu.attendifypro.controller.student;
 
 import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
+import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.service.CourseOfferingService;
@@ -8,28 +9,26 @@ import edu.miu.attendifypro.service.MessagingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin-view/course-offering")
+@RequestMapping("/student-view/course-offering")
 @CrossOrigin
-public class AdminCourseOfferingController {
+public class StudentCourseOfferingController {
     private final CourseOfferingService courseOfferingService;
     private final MessagingService messagingService;
 
-    public AdminCourseOfferingController(CourseOfferingService courseOfferingService,
-                                         MessagingService messagingService) {
+    public StudentCourseOfferingController(CourseOfferingService courseOfferingService, MessagingService messagingService) {
         this.courseOfferingService = courseOfferingService;
-        this.messagingService=messagingService;
+        this.messagingService = messagingService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CourseOfferingResponse>>> getCourseOfferingAttendance(@RequestParam(required = false) String date) {
-        ServiceResponse<List<CourseOfferingResponse>> serviceRsp= courseOfferingService.filterCourseOffering(date);
+    @GetMapping("/{offeringId}")
+    public ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>> getCourseOfferingAttendance(@PathVariable Long offeringId) {
+        ServiceResponse<List<StudentCourseSelectionResponse>> serviceRsp= courseOfferingService.getStudentCourseOfferingById(offeringId);
 
-        ApiResponse<List<CourseOfferingResponse>> apiResponse = ApiResponse
-                .<List<CourseOfferingResponse>>builder()
+        ApiResponse<List<StudentCourseSelectionResponse>> apiResponse = ApiResponse
+                .<List<StudentCourseSelectionResponse>>builder()
                 .status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
@@ -37,7 +36,7 @@ public class AdminCourseOfferingController {
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
-        return new ResponseEntity<ApiResponse<List<CourseOfferingResponse>>>(apiResponse,
+        return new ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 }
