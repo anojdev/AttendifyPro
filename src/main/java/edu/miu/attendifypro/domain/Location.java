@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Location {
+public class Location extends AuditInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -24,6 +24,4 @@ public class Location {
     @ManyToOne(fetch = FetchType.LAZY)
     private LocationType locationType;
 
-    @Embedded
-    AuditInfo auditInfo;
 }

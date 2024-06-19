@@ -50,4 +50,9 @@ public class StudentPersistenceServiceImpl implements StudentPersistenceService 
     public Optional<Student> findById(Long id) {
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Student> findByAccountId(Long id) {
+        return studentRepository.findByAccount_Id(id);
+    }
 }

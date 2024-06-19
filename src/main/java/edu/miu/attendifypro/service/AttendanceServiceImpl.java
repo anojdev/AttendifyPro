@@ -1,13 +1,12 @@
 package edu.miu.attendifypro.service;
 
-import edu.miu.attendifypro.domain.AppStatusCode;
-import edu.miu.attendifypro.domain.CourseOffering;
-import edu.miu.attendifypro.domain.Session;
-import edu.miu.attendifypro.domain.StudentAttendanceRecord;
+import edu.miu.attendifypro.config.ContextUser;
+import edu.miu.attendifypro.domain.*;
 import edu.miu.attendifypro.dto.response.AttendanceReportDto;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
 import edu.miu.attendifypro.service.persistence.CourseOfferingPersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentAttendancePersistenceService;
+import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -35,10 +34,15 @@ public class AttendanceServiceImpl implements AttendanceService {
     final
     StudentAttendancePersistenceService service;
     final CourseOfferingPersistenceService courseOfferingPersistenceService;
+    final StudentPersistenceService studentPersistenceService;
 
-    public AttendanceServiceImpl(StudentAttendancePersistenceService service, CourseOfferingPersistenceService courseOfferingPersistenceService) {
+    final ContextUser user;
+
+    public AttendanceServiceImpl(StudentAttendancePersistenceService service, CourseOfferingPersistenceService courseOfferingPersistenceService, StudentPersistenceService studentPersistenceService, ContextUser user) {
         this.service = service;
         this.courseOfferingPersistenceService = courseOfferingPersistenceService;
+        this.studentPersistenceService = studentPersistenceService;
+        this.user = user;
     }
 
 
@@ -57,6 +61,24 @@ public class AttendanceServiceImpl implements AttendanceService {
         return ServiceResponse.of(reportPath, AppStatusCode.S20000);
     }
 
+    @Override
+    public ServiceResponse<List<AttendanceReportDto>> getStudentAttendanceRecords(Long offeringId) {
+        Optional<CourseOffering> courseOfferingOpt=courseOfferingPersistenceService.findById(offeringId);
+        if(courseOfferingOpt.isEmpty()){
+            return ServiceResponse.of(AppStatusCode.E40004);
+        }
+        List<AttendanceReportDto> attendanceReport=new ArrayList<>();
+        if(courseOfferingOpt.get().getStartDate().isAfter(LocalDate.now())){
+            return ServiceResponse.of(attendanceReport, AppStatusCode.S20000);
+        }
+        CourseOffering courseOffering=courseOfferingOpt.get();
+        Optional<Student> studentOpt=studentPersistenceService.findByAccountId(user.getUser().getId());
+        List<StudentAttendanceRecord> records=service.getStudentAttendanceRecords(offeringId,courseOffering,studentOpt.get().getId());
+        List<Session> sessions=courseOffering.getSessions();
+        attendanceReport=generateAttendanceReport(records,sessions);
+        return ServiceResponse.of(attendanceReport, AppStatusCode.S20000);
+    }
+
     public List<AttendanceReportDto> generateAttendanceReport(List<StudentAttendanceRecord> attendanceRecords, List<Session> sessions) {
         List<AttendanceReportDto> reportList = new ArrayList<>();
 
@@ -67,9 +89,11 @@ public class AttendanceServiceImpl implements AttendanceService {
             String studentName = record.getStudent().getFirstName()+" "+record.getStudent().getLastName();
 
             boolean isPresent = false;
+            LocalDateTime sessionStart = null;
+            LocalDateTime sessionEnd = null;
             for (Session session : sessions) {
-                LocalDateTime sessionStart = session.getStartDateTime();
-                LocalDateTime sessionEnd = session.getEndDateTime();
+                sessionStart = session.getStartDateTime();
+                sessionEnd = session.getEndDateTime();
                 LocalDate sessionDate = sessionStart.toLocalDate();
 
                 if (scanDate.equals(sessionDate) && !scanDateTime.isBefore(sessionStart) && !scanDateTime.isAfter(sessionEnd)) {
@@ -78,7 +102,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 }
             }
 
-            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent);
+            AttendanceReportDto reportDto = new AttendanceReportDto(studentId,studentName, scanDateTime, scanDate, isPresent,sessionStart+"-"+sessionEnd);
             reportList.add(reportDto);
         }
 
@@ -173,18 +197,4 @@ public class AttendanceServiceImpl implements AttendanceService {
         return fileLocation;
     }
 
-    /*{
-
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + locationPath.getFileName().toString());
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(locationPath.toFile().length()));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(locationPath.toFile().length())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
-    }*/
 }
