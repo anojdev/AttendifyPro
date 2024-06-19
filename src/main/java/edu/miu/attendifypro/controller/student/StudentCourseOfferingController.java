@@ -63,10 +63,10 @@ public class StudentCourseOfferingController {
     }
 
     @GetMapping("/{offeringId}")
-    public ResponseEntity<ApiResponse<CourseOfferingResponse>> getCourseOfferingById(@PathVariable Long offeringId) {
-        ServiceResponse<CourseOfferingResponse> serviceRsp= courseOfferingService.getCourseOfferingById(offeringId);
-        ApiResponse<CourseOfferingResponse> apiResponse = ApiResponse
-                .<CourseOfferingResponse>builder()
+    public ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>> getCourseOfferingById(@PathVariable Long offeringId) {
+        ServiceResponse<List<StudentCourseSelectionResponse>> serviceRsp= courseOfferingService.getStudentCourseOfferingById(offeringId);
+        ApiResponse<List<StudentCourseSelectionResponse>> apiResponse = ApiResponse
+                .<List<StudentCourseSelectionResponse>>builder()
                 .status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
@@ -74,7 +74,7 @@ public class StudentCourseOfferingController {
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
-        return new ResponseEntity<ApiResponse<CourseOfferingResponse>>(apiResponse,
+        return new ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
 
     }
