@@ -9,4 +9,6 @@ public interface StudentAttendancePersistenceService {
 
 
     List<StudentAttendanceRecord> getAttendanceRecords(Long offeringId, CourseOffering courseOffering);
+
+    List<StudentAttendanceRecord> getStudentAttendanceRecords(Long offeringId, CourseOffering courseOffering,Long studentId);
 }

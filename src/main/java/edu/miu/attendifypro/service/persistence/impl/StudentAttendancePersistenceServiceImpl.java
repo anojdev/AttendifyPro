@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,14 @@ public class StudentAttendancePersistenceServiceImpl implements StudentAttendanc
     @Override
     public List<StudentAttendanceRecord> getAttendanceRecords(Long offeringId,CourseOffering courseOffering) {
         return repository.findAllByLocationAndScanDateTimeBetween(courseOffering.getLocation(),
-                courseOffering.getStartDate().atStartOfDay(), courseOffering.getEndDate().atStartOfDay());
+                courseOffering.getStartDate().atStartOfDay(), courseOffering.getEndDate().atTime(LocalTime.MAX));
+    }
+
+    @Override
+    public List<StudentAttendanceRecord> getStudentAttendanceRecords(Long offeringId,
+                                                                     CourseOffering courseOffering, Long studentId) {
+        return repository.findAttendanceForStudent(courseOffering.getLocation(),
+                courseOffering.getStartDate().atStartOfDay(),
+                courseOffering.getEndDate().atTime(LocalTime.MAX),studentId);
     }
 }
