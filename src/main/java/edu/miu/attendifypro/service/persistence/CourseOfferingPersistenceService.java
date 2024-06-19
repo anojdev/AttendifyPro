@@ -14,7 +14,7 @@ public interface CourseOfferingPersistenceService {
     List<CourseOffering> findAll();
 
     Page<CourseOffering> findAll(Pageable pageable);
-    List<CourseOffering> filterCourseOffering(LocalDate date);
+    List<Course> getCoursesByDate(LocalDate date);
     Optional<CourseOffering> findById(Long id);
     CourseOffering save(CourseOffering courseOffering);
 
