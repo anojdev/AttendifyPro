@@ -1,16 +1,10 @@
 package edu.miu.attendifypro.mapper;
 
-import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.domain.CourseOffering;
-import edu.miu.attendifypro.domain.Faculty;
-import edu.miu.attendifypro.domain.Location;
+import edu.miu.attendifypro.domain.*;
 import edu.miu.attendifypro.dto.request.CourseOfferingCreateRequest;
 import edu.miu.attendifypro.dto.request.LocationCreateRequest;
 import edu.miu.attendifypro.dto.request.LocationUpdateRequest;
-import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
-import edu.miu.attendifypro.dto.response.CourseResponse;
-import edu.miu.attendifypro.dto.response.FacultyResponse;
-import edu.miu.attendifypro.dto.response.LocationResponse;
+import edu.miu.attendifypro.dto.response.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -26,11 +20,9 @@ public interface CourseOfferingDtoMapper {
     @Mapping(target = "location", ignore = true)
     CourseOffering courseOfferingCreateRequestToCourseOffering(CourseOfferingCreateRequest courseOffRequest);
 
+
     CourseOfferingResponse courseOfferingToCourseOfferingResponse(CourseOffering courseOffering);
-//    Location locationDtoToLocation(LocationResponse locationdto);
     FacultyResponse facultyToFacultyResponse(Faculty faculty);
 
-    CourseResponse courseToCourseDto(Course course);
-    Course courseDtoToCourse(CourseResponse coursedto);
-    LocationResponse locationToLocationDto(Location location);
+    StudentCourseSelectionResponse studentCourseSelectionToResponse(StudentCourseSelection data);
 }

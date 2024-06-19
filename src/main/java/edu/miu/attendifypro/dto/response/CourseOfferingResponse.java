@@ -17,7 +17,7 @@ public class CourseOfferingResponse {
 
     private String courseOfferingType;
 
-    private Location location;
+    private LocationResponse location;
 
     private LocalDate startDate;
 

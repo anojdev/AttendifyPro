@@ -25,4 +25,8 @@ public class StudentCourseSelectionPersistenceServiceImpl implements StudentCour
         LocalDate targetDate = LocalDate.now().minusDays(n);
         return studentCourseSelectionRepository.getOfferingStartingInNDays(targetDate);
     }
+    public List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId){
+        var d = studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
+        return d;
+    }
 }

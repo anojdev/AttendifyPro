@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,11 @@ public class CourseOfferingPersistenceServiceImpl implements CourseOfferingPersi
     @Override
     public Page<CourseOffering> findAll(Pageable pageable) {
         return courseOfferingRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<CourseOffering> filterCourseOffering(LocalDate date) {
+        return courseOfferingRepository.filterCourseOffering(date);
     }
 
     @Override

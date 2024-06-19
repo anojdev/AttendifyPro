@@ -39,8 +39,6 @@ public enum AppStatusCode {
     E50005("delete.error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     E50006("serialization.error", HttpStatus.INTERNAL_SERVER_ERROR);
-
-
     private final HttpStatus httpStatusCode;
     private final String description;
 
