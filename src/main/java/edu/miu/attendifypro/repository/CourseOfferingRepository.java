@@ -18,4 +18,5 @@ public interface CourseOfferingRepository extends JpaRepository<CourseOffering,L
             +" "
     )
     public List<Course> getCoursesByDate(@Param("date") LocalDate date);
+
 }
