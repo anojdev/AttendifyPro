@@ -26,8 +26,7 @@ public class StudentCourseSelectionPersistenceServiceImpl implements StudentCour
         return studentCourseSelectionRepository.getOfferingStartingInNDays(targetDate);
     }
     public List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId){
-        var d = studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
-        return d;
+        return studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
     }
 
     @Override

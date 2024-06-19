@@ -5,6 +5,7 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.service.AttendanceService;
 import edu.miu.attendifypro.service.CourseOfferingService;
 import edu.miu.attendifypro.service.MessagingService;
@@ -45,6 +46,7 @@ public class StudentCourseOfferingController {
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 
+
     @GetMapping("/{offeringId}/attendance")
     public ResponseEntity<ApiResponse<List<AttendanceReportDto>>> getStudentAttendanceRecords(@PathVariable Long offeringId) {
         ServiceResponse<List<AttendanceReportDto>> serviceRsp= attendanceService.getStudentAttendanceRecords(offeringId);
@@ -56,8 +58,25 @@ public class StudentCourseOfferingController {
             apiResponse.setData(serviceRsp.getData().get());
             apiResponse.setStatus(true);
         }
-        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"attendance"}));
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"Student attendance"}));
         return new ResponseEntity<ApiResponse<List<AttendanceReportDto>>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<Report1Response>>> getStudentCourseOffering() {
+        ServiceResponse<List<Report1Response>> serviceRsp= courseOfferingService.getStudentCourseOffering();
+
+        ApiResponse<List<Report1Response>> apiResponse = ApiResponse
+                .<List<Report1Response>>builder()
+                .status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
+        return new ResponseEntity<ApiResponse<List<Report1Response>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 }
