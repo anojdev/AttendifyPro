@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.controller.sysadmin;
 
+import edu.miu.attendifypro.config.ContextUser;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.request.CourseCreateRequest;
 import edu.miu.attendifypro.dto.request.CourseUpdateRequest;
@@ -9,6 +10,7 @@ import edu.miu.attendifypro.service.CourseService;
 import edu.miu.attendifypro.service.MessagingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,18 +22,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/sys-admin/course")
 @CrossOrigin
+@Slf4j
 public class CourseController {
     private final CourseService courseService;
+
+    private final ContextUser contextUser;
 
 
     private final MessagingService messagingService;
 
-    public CourseController(CourseService courseService, MessagingService messagingService) {
+    public CourseController(CourseService courseService, ContextUser contextUser, MessagingService messagingService) {
         this.courseService = courseService;
+        this.contextUser = contextUser;
         this.messagingService = messagingService;
     }
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses() {
+        log.info(contextUser.toString());
         ServiceResponse<List<CourseResponse>> serviceRsp= courseService.getAllCourses();
         ApiResponse<List<CourseResponse>> apiResponse = ApiResponse.<List<CourseResponse>>builder().status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
