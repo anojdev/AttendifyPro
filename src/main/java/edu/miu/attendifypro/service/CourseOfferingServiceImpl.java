@@ -7,6 +7,7 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.mapper.CourseOfferingDtoMapper;
 import edu.miu.attendifypro.mapper.DtoMapper;
@@ -86,16 +87,16 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         }
     }
     @Override
-    public ServiceResponse<List<CourseOfferingResponse>> filterCourseOffering(String date) {
+    public ServiceResponse<List<CourseScheduleResponse>> getCoursesByDate(String date) {
         try {
             LocalDate localDate=null;
             if(date!=null && !date.isEmpty())
                 localDate = LocalDate.parse(date);
 
-            List<CourseOffering> lst = persistenceService.filterCourseOffering(localDate);
-            List<CourseOfferingResponse> responseList =lst.stream()
-                    .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
-                            ::courseOfferingToCourseOfferingResponse).toList();
+            List<Course> lst = persistenceService.getCoursesByDate(localDate);
+            List<CourseScheduleResponse> responseList =lst.stream()
+                    .map(ReportMapper.reportMapper
+                            ::courseToCourseScheduleResponse).toList();
             return ServiceResponse.of(responseList, AppStatusCode.S20000);
         }
         catch (DateTimeParseException e) {

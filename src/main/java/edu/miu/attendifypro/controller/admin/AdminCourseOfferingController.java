@@ -1,10 +1,9 @@
 package edu.miu.attendifypro.controller.admin;
 
-import edu.miu.attendifypro.domain.StudentAttendanceRecord;
-import edu.miu.attendifypro.dto.response.AttendanceReportDto;
 import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.service.AttendanceService;
 import edu.miu.attendifypro.service.CourseOfferingService;
 import edu.miu.attendifypro.service.MessagingService;
@@ -18,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,11 +35,11 @@ public class AdminCourseOfferingController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CourseOfferingResponse>>> getCourseOfferingAttendance(@RequestParam(required = false) String date) {
-        ServiceResponse<List<CourseOfferingResponse>> serviceRsp= courseOfferingService.filterCourseOffering(date);
+    public ResponseEntity<ApiResponse<List<CourseScheduleResponse>>> getCourseOfferingAttendance(@RequestParam(required = false) String date) {
+        ServiceResponse<List<CourseScheduleResponse>> serviceRsp= courseOfferingService.getCoursesByDate(date);
 
-        ApiResponse<List<CourseOfferingResponse>> apiResponse = ApiResponse
-                .<List<CourseOfferingResponse>>builder()
+        ApiResponse<List<CourseScheduleResponse>> apiResponse = ApiResponse
+                .<List<CourseScheduleResponse>>builder()
                 .status(false)
                 .code(serviceRsp.getStatusCode().name()).build();
         if (serviceRsp.getData().isPresent()) {
@@ -49,7 +47,7 @@ public class AdminCourseOfferingController {
             apiResponse.setStatus(true);
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
-        return new ResponseEntity<ApiResponse<List<CourseOfferingResponse>>>(apiResponse,
+        return new ResponseEntity<ApiResponse<List<CourseScheduleResponse>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 

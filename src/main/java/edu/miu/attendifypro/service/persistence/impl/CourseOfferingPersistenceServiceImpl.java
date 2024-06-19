@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.service.persistence.impl;
 
+import edu.miu.attendifypro.domain.Course;
 import edu.miu.attendifypro.domain.CourseOffering;
 import edu.miu.attendifypro.repository.CourseOfferingRepository;
 import edu.miu.attendifypro.service.persistence.CourseOfferingPersistenceService;
@@ -33,8 +34,8 @@ public class CourseOfferingPersistenceServiceImpl implements CourseOfferingPersi
     }
 
     @Override
-    public List<CourseOffering> filterCourseOffering(LocalDate date) {
-        return courseOfferingRepository.filterCourseOffering(date);
+    public List<Course> getCoursesByDate(LocalDate date) {
+        return courseOfferingRepository.getCoursesByDate(date);
     }
 
     @Override
