@@ -19,4 +19,6 @@ public interface StudentPersistenceService {
     void delete(Student student);
 
     Optional<Student> findById(Long id);
+
+    Optional<Student> findByAccountId(Long id);
 }
