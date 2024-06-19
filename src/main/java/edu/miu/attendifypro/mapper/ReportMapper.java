@@ -1,12 +1,7 @@
 package edu.miu.attendifypro.mapper;
 
-import edu.miu.attendifypro.domain.Course;
-import edu.miu.attendifypro.domain.CourseOffering;
-import edu.miu.attendifypro.domain.StudentCourseSelection;
-import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
-import edu.miu.attendifypro.dto.response.report.CourseOfferingReport1Response;
-import edu.miu.attendifypro.dto.response.report.CourseReportResponse;
-import edu.miu.attendifypro.dto.response.report.Report1Response;
+import edu.miu.attendifypro.domain.*;
+import edu.miu.attendifypro.dto.response.report.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -22,4 +17,7 @@ public interface ReportMapper {
     CourseOfferingReport1Response courseOffToCourseOffReport1Response(CourseOffering courseOffering);
 
     CourseScheduleResponse courseToCourseScheduleResponse(Course course);
+    CourseOfferingWithRosterResponse courseOfferingToRosterMapper(CourseOffering course);
+    FacultyReportResponse facultyToFacultyReportResponse(Faculty faculty);
+    StudentReportResponse studentToStudentReportResponse(Student faculty);
 }

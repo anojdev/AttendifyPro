@@ -19,4 +19,5 @@ public interface CourseOfferingPersistenceService {
     CourseOffering save(CourseOffering courseOffering);
 
     void delete(CourseOffering courseOffering);
+    CourseOffering getCourseOfferingById(long id);
 }

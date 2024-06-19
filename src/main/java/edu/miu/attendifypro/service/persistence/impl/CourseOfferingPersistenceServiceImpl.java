@@ -52,4 +52,14 @@ public class CourseOfferingPersistenceServiceImpl implements CourseOfferingPersi
     public void delete(CourseOffering courseOffering) {
         courseOfferingRepository.delete(courseOffering);
     }
+
+    @Override
+    public CourseOffering getCourseOfferingById(long id) {
+        return null;
+    }
+
+//    @Override
+//    public CourseOffering getCourseOfferingById(long id) {
+//        return courseOfferingRepository.getCourseOfferingById(id);
+//    }
 }

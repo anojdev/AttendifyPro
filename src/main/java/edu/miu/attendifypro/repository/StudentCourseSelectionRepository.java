@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.repository;
 
+import edu.miu.attendifypro.domain.Student;
 import edu.miu.attendifypro.domain.StudentCourseSelection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,8 @@ public interface StudentCourseSelectionRepository extends JpaRepository<StudentC
             "JOIN FETCH scs.courseOffering co " +
             "WHERE co.startDate > :targetDate")
     List<StudentCourseSelection> getOfferingStartingInNDays(LocalDate targetDate);
+
+    @Query("SELECT s.student FROM StudentCourseSelection s " +
+            "WHERE s.courseOffering.id = :courseOfferingId")
+    List<Student> findStudentsByCouseOfferingId(@Param("courseOfferingId") Long courseOfferingId);
 }
