@@ -4,6 +4,7 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.service.CourseOfferingService;
 import edu.miu.attendifypro.service.MessagingService;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,23 @@ public class StudentCourseOfferingController {
         }
         apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
         return new ResponseEntity<ApiResponse<List<StudentCourseSelectionResponse>>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<Report1Response>>> getStudentCourseOffering() {
+        ServiceResponse<List<Report1Response>> serviceRsp= courseOfferingService.getStudentCourseOffering();
+
+        ApiResponse<List<Report1Response>> apiResponse = ApiResponse
+                .<List<Report1Response>>builder()
+                .status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
+        return new ResponseEntity<ApiResponse<List<Report1Response>>>(apiResponse,
                 serviceRsp.getStatusCode().getHttpStatusCode());
     }
 }

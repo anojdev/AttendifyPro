@@ -7,8 +7,10 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.mapper.CourseOfferingDtoMapper;
 import edu.miu.attendifypro.mapper.DtoMapper;
+import edu.miu.attendifypro.mapper.ReportMapper;
 import edu.miu.attendifypro.service.persistence.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -213,6 +215,22 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         }
         catch (Exception e){
             return ServiceResponse.of(AppStatusCode.E50002);
+        }
+    }
+
+    @Override
+    public ServiceResponse<List<Report1Response>> getStudentCourseOffering() {
+        try{
+            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentId("617595");
+            List<Report1Response> responseList =lst.stream()
+                    .map(ReportMapper.reportMapper
+                            ::studentCourseSelectionToReport1Response).toList();
+            return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ServiceResponse.of(AppStatusCode.E50002);
+
         }
     }
 }

@@ -11,15 +11,17 @@ import java.util.Optional;
 
 @Repository
 public interface StudentCourseSelectionRepository extends JpaRepository<StudentCourseSelection,Long> {
-
-//    @Query("select s from " +
-//            "StudentCourseSelection s " +
-//            "join fetch s.student " +
-//            "join fetch s.courseOffering " +
-//            "where s.courseOffering.id=:offeringId and s.student.studentId=:studentId")
     @Query("SELECT DISTINCT s FROM StudentCourseSelection s " +
             "JOIN FETCH s.student st " +
             "JOIN FETCH s.courseOffering co " +
             "WHERE co.id = :offeringId AND st.studentId = :studentId")
     List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(@Param("studentId") String studentId,@Param("offeringId") Long offeringId);
+
+    @Query("SELECT DISTINCT s FROM StudentCourseSelection s " +
+            "JOIN FETCH s.student st " +
+            "JOIN FETCH s.courseOffering co " +
+            "JOIN FETCH co.courses c " +
+            "WHERE st.studentId = :studentId")
+    List<StudentCourseSelection> findByStudentId(@Param("studentId") String studentId);
+
 }
