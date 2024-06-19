@@ -3,7 +3,9 @@ package edu.miu.attendifypro.service;
 import edu.miu.attendifypro.config.ContextUser;
 import edu.miu.attendifypro.domain.*;
 import edu.miu.attendifypro.dto.response.AttendanceReportDto;
+import edu.miu.attendifypro.dto.response.StudentAttendanceRecordResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.mapper.StudentAttendanceRecordDtoMapper;
 import edu.miu.attendifypro.service.persistence.CourseOfferingPersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentAttendancePersistenceService;
 import edu.miu.attendifypro.service.persistence.StudentPersistenceService;
@@ -71,6 +73,18 @@ public class AttendanceServiceImpl implements AttendanceService {
         List<Session> sessions=courseOffering.getSessions();
         attendanceReport=generateAttendanceReport(records,sessions);
         return ServiceResponse.of(attendanceReport, AppStatusCode.S20000);
+    }
+
+    @Override
+    public ServiceResponse<List<StudentAttendanceRecordResponse>> getSingleStudentAttendanceRecord() {
+        try {
+            Optional<Student> studentOpt=studentPersistenceService.findByAccountId(user.getUser().getId());
+            List<StudentAttendanceRecord> studentAttendanceList = service.getSingleStudentAttendanceRecords(studentOpt.get().getId());
+            List<StudentAttendanceRecordResponse> studentAttendanceResponses = studentAttendanceList.stream().map(StudentAttendanceRecordDtoMapper.dtoMapper::studentAttendanceRecordResponse).toList();
+            return ServiceResponse.of(studentAttendanceResponses, AppStatusCode.S20000);
+        }catch (Exception e){
+            return ServiceResponse.of(AppStatusCode.E50001);
+        }
     }
 
     public List<AttendanceReportDto> generateAttendanceReport(List<StudentAttendanceRecord> attendanceRecords, List<Session> sessions) {

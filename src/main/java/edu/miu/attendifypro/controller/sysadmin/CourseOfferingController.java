@@ -66,6 +66,7 @@ public class CourseOfferingController {
                 serviceRsp.getStatusCode().getHttpStatusCode());
 
     }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse<CourseOfferingResponse>> create(@Valid @RequestBody CourseOfferingCreateRequest createRequest,
                                                               HttpServletRequest request) {

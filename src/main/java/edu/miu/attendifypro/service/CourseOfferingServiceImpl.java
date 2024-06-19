@@ -7,6 +7,8 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseOfferingWithRosterResponse;
+import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.mapper.CourseOfferingDtoMapper;
 import edu.miu.attendifypro.mapper.DtoMapper;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseOfferingServiceImpl implements CourseOfferingService{
@@ -86,16 +89,16 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
         }
     }
     @Override
-    public ServiceResponse<List<CourseOfferingResponse>> filterCourseOffering(String date) {
+    public ServiceResponse<List<CourseScheduleResponse>> getCoursesByDate(String date) {
         try {
             LocalDate localDate=null;
             if(date!=null && !date.isEmpty())
                 localDate = LocalDate.parse(date);
 
-            List<CourseOffering> lst = persistenceService.filterCourseOffering(localDate);
-            List<CourseOfferingResponse> responseList =lst.stream()
-                    .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
-                            ::courseOfferingToCourseOfferingResponse).toList();
+            List<Course> lst = persistenceService.getCoursesByDate(localDate);
+            List<CourseScheduleResponse> responseList =lst.stream()
+                    .map(ReportMapper.reportMapper
+                            ::courseToCourseScheduleResponse).toList();
             return ServiceResponse.of(responseList, AppStatusCode.S20000);
         }
         catch (DateTimeParseException e) {
@@ -226,6 +229,27 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
                     .map(ReportMapper.reportMapper
                             ::studentCourseSelectionToReport1Response).toList();
             return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ServiceResponse.of(AppStatusCode.E50002);
+
+        }
+    }
+
+    @Override
+    public ServiceResponse<CourseOfferingWithRosterResponse> getCourseOfferingRoster(long id) {
+        try{
+            Optional<CourseOffering> courseOffering=persistenceService.findById(id);
+            CourseOfferingWithRosterResponse response=new CourseOfferingWithRosterResponse();
+            if(courseOffering.isPresent()){
+               response =  ReportMapper.reportMapper.courseOfferingToRosterMapper(courseOffering.get());
+               List<Student> studentList=studentCoursePersistence.findStudentByOfferingId(id);
+               response.setStudents(studentList.stream()
+                       .map(ReportMapper.reportMapper::studentToStudentReportResponse)
+                       .collect(Collectors.toList()));
+            }
+            return ServiceResponse.of(response, AppStatusCode.S20000);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
