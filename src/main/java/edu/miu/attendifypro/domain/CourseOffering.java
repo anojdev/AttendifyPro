@@ -28,17 +28,17 @@ public class CourseOffering {
 
     private String courseOfferingType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Location location;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Faculty faculty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Course courses;
 
     @Embedded
@@ -51,10 +51,10 @@ public class CourseOffering {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         while (!currentDate.isAfter(endDate)) {
             //TODO better set time from properties file than hard code
-            LocalTime startTime1 = LocalTime.parse("10:00 am", timeFormatter);
-            LocalTime endTime1 = LocalTime.parse("12:30 pm", timeFormatter);
-            LocalTime startTime2 = LocalTime.parse("01:30 pm", timeFormatter);
-            LocalTime endTime2 = LocalTime.parse("03:30 pm", timeFormatter);
+            LocalTime startTime1 = LocalTime.parse("10:00 AM", timeFormatter);
+            LocalTime endTime1 = LocalTime.parse("12:30 PM", timeFormatter);
+            LocalTime startTime2 = LocalTime.parse("01:30 PM", timeFormatter);
+            LocalTime endTime2 = LocalTime.parse("03:30 PM", timeFormatter);
 
             sessions.add(new Session(LocalDateTime.of(currentDate, startTime1), LocalDateTime.of(currentDate, endTime1)));
             sessions.add(new Session(LocalDateTime.of(currentDate, startTime2), LocalDateTime.of(currentDate, endTime2)));

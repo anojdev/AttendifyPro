@@ -24,5 +24,6 @@ public class StudentCourseSelection {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Student student;
+    private String grade;
 
 }
