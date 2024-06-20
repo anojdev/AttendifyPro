@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.controller.sysadmin;
 
+import edu.miu.attendifypro.domain.AppStatusCode;
 import edu.miu.attendifypro.dto.request.LocationCreateRequest;
 import edu.miu.attendifypro.dto.request.LocationUpdateRequest;
 import edu.miu.attendifypro.dto.response.LocationResponse;
@@ -28,6 +29,7 @@ public class LocationController {
     public LocationController(LocationService locationService, MessagingService messagingService) {
         this.locationService = locationService;
         this.messagingService = messagingService;
+
     }
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<LocationResponse>>> getAllLocations() {
