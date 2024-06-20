@@ -4,20 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * @author kush
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendanceReportDto {
-    private String studentId;
-    private String studentName;
+public class StudentAttendanceRecordResponse {
+    private Long id;
     private LocalDateTime scanDateTime;
-    private LocalDate day;
-    private boolean isPresent;
-    private String sessionTime;
+//    private StudentResponse student;
+    private LocationResponse location;
 }

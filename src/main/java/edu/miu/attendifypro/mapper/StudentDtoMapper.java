@@ -32,6 +32,9 @@ public interface StudentDtoMapper {
                 .map(selection -> {
                     CourseResponse courseDTO = courseOfferingToCourseDTO(selection.getCourseOffering());
                     courseDTO.setCourseName( selection.getCourseOffering().getCourses().getCourseName());
+                    courseDTO.setCredits(selection.getCourseOffering().getCourses().getCredits());
+                    courseDTO.setCourseDescription(selection.getCourseOffering().getCourses().getCourseDescription());
+                    courseDTO.setDepartment(selection.getCourseOffering().getCourses().getDepartment());
                     courseDTO.setCourseCode( selection.getCourseOffering().getCourses().getCourseCode());
                     return courseDTO;
                 })

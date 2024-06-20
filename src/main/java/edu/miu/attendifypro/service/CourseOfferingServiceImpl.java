@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.service;
 
+import edu.miu.attendifypro.config.ContextUser;
 import edu.miu.attendifypro.domain.*;
 import edu.miu.attendifypro.dto.request.CourseOfferingCreateRequest;
 import edu.miu.attendifypro.dto.request.CourseOfferingUpdateRequest;
@@ -7,6 +8,7 @@ import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.CourseResponse;
 import edu.miu.attendifypro.dto.response.StudentCourseSelectionResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseOfferingWithRosterResponse;
 import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.dto.response.report.Report1Response;
 import edu.miu.attendifypro.mapper.CourseOfferingDtoMapper;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseOfferingServiceImpl implements CourseOfferingService{
@@ -30,17 +33,24 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
     private final FacultyPersistenceService facultyPersistenceService;
     private final LocationPersistenceService locationPersistenceService;
     private final StudentCourseSelectionPersistenceService studentCoursePersistence;
+    final StudentPersistenceService studentPersistenceService;
+
+    final ContextUser user;
+
 
     public CourseOfferingServiceImpl(CourseOfferingPersistenceService persistenceService,
                                      CoursePersistenceService coursePersistenceService,
                                      FacultyPersistenceService facultyPersistenceService,
                                      LocationPersistenceService locationPersistenceService,
-                                     StudentCourseSelectionPersistenceService studentCoursePersistence) {
+                                     StudentCourseSelectionPersistenceService studentCoursePersistence,
+                                     StudentPersistenceService studentPersistenceService, ContextUser user) {
         this.persistenceService = persistenceService;
         this.coursePersistenceService = coursePersistenceService;
         this.facultyPersistenceService = facultyPersistenceService;
         this.locationPersistenceService = locationPersistenceService;
         this.studentCoursePersistence=studentCoursePersistence;
+        this.studentPersistenceService = studentPersistenceService;
+        this.user = user;
     }
 
     @Override
@@ -208,7 +218,8 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
     @Override
     public ServiceResponse<List<StudentCourseSelectionResponse>> getStudentCourseOfferingById(long offeringId) {
         try{
-            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentIdAndCourseOfferingId("617595",offeringId);
+            Optional<Student> studentOpt=studentPersistenceService.findByAccountId(user.getUser().getId());
+            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentIdAndCourseOfferingId(studentOpt.get().getStudentId(),offeringId);
             List<StudentCourseSelectionResponse> responseList =lst.stream()
                     .map(CourseOfferingDtoMapper.courseOfferingDtoMapper
                             ::studentCourseSelectionToResponse).toList();
@@ -222,11 +233,34 @@ public class CourseOfferingServiceImpl implements CourseOfferingService{
     @Override
     public ServiceResponse<List<Report1Response>> getStudentCourseOffering() {
         try{
-            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentId("617595");
+            Optional<Student> studentOpt=studentPersistenceService.findByAccountId(user.getUser().getId());
+            List<StudentCourseSelection> lst=studentCoursePersistence.findByStudentId(studentOpt.get().getStudentId());
             List<Report1Response> responseList =lst.stream()
                     .map(ReportMapper.reportMapper
                             ::studentCourseSelectionToReport1Response).toList();
             return ServiceResponse.of(responseList, AppStatusCode.S20000);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ServiceResponse.of(AppStatusCode.E50002);
+
+        }
+    }
+
+    @Override
+    public ServiceResponse<CourseOfferingWithRosterResponse> getCourseOfferingRoster(long id) {
+        try{
+            Optional<CourseOffering> courseOffering=persistenceService.findById(id);
+            if(courseOffering.isEmpty()){
+                return ServiceResponse.of(AppStatusCode.E40004,List.of("not.found","Course Offering"));
+            }
+            CourseOfferingWithRosterResponse response=new CourseOfferingWithRosterResponse();
+            response =  ReportMapper.reportMapper.courseOfferingToRosterMapper(courseOffering.get());
+            List<Student> studentList=studentCoursePersistence.findStudentByOfferingId(id);
+            response.setStudents(studentList.stream()
+                    .map(ReportMapper.reportMapper::studentToStudentReportResponse)
+                    .collect(Collectors.toList()));
+            return ServiceResponse.of(response, AppStatusCode.S20000);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

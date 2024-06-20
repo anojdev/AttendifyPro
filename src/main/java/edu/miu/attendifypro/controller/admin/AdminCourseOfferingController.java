@@ -3,6 +3,7 @@ package edu.miu.attendifypro.controller.admin;
 import edu.miu.attendifypro.dto.response.CourseOfferingResponse;
 import edu.miu.attendifypro.dto.response.common.ApiResponse;
 import edu.miu.attendifypro.dto.response.common.ServiceResponse;
+import edu.miu.attendifypro.dto.response.report.CourseOfferingWithRosterResponse;
 import edu.miu.attendifypro.dto.response.report.CourseScheduleResponse;
 import edu.miu.attendifypro.service.AttendanceService;
 import edu.miu.attendifypro.service.CourseOfferingService;
@@ -73,4 +74,21 @@ public class AdminCourseOfferingController {
                 .body(resource);
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseOfferingWithRosterResponse>> getCourseOfferingById(@PathVariable Long id) {
+        ServiceResponse<CourseOfferingWithRosterResponse> serviceRsp= courseOfferingService.getCourseOfferingRoster(id);
+        ApiResponse<CourseOfferingWithRosterResponse> apiResponse = ApiResponse
+                .<CourseOfferingWithRosterResponse>builder()
+                .status(false)
+                .code(serviceRsp.getStatusCode().name()).build();
+        if (serviceRsp.getData().isPresent()) {
+            apiResponse.setData(serviceRsp.getData().get());
+            apiResponse.setStatus(true);
+        }
+        apiResponse.setMessage(messagingService.getResponseMessage(serviceRsp, new String[]{"CourseOffering"}));
+        return new ResponseEntity<ApiResponse<CourseOfferingWithRosterResponse>>(apiResponse,
+                serviceRsp.getStatusCode().getHttpStatusCode());
+    }
+
 }

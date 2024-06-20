@@ -36,9 +36,9 @@ public class CourseSelectionEmailDispatcher {
     }
 
 
-    @Scheduled(initialDelay = 10L,fixedDelayString = "#{${app.email.course-welcome.dispatch.interval:1} * 1000*60}")
+    @Scheduled(initialDelay = 10000L,fixedDelayString = "#{${app.email.course-welcome.dispatch.interval:1} * 1000*60}")
     public void dispatchWelcomeEmails(){
-        List<StudentCourseSelection> courseSelections=persistenceService.getOfferingStartingInNDays(1);
+        List<StudentCourseSelection> courseSelections=persistenceService.getOfferingStartingInNDays(7);
         for (StudentCourseSelection courseSelection : courseSelections) {
             EmailObject object = new EmailObject();
             object.setFrom(courseSelection.getCourseOffering().getFaculty().getEmail());
@@ -47,6 +47,8 @@ public class CourseSelectionEmailDispatcher {
             object.setBody("Dear Student, Welcome to the block.");
             try {
                 sendMessage.dispatchEmailMessage(StaticUtils.mapper.writeValueAsString(object));
+                courseSelection.setNotified(true);
+                persistenceService.save(courseSelection);
             } catch (JsonProcessingException e) {
                 log.error("Error parsing email object to String {}", e.getOriginalMessage());
             }

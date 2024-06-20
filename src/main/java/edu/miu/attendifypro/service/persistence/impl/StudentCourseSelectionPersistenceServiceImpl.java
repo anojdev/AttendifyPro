@@ -1,5 +1,6 @@
 package edu.miu.attendifypro.service.persistence.impl;
 
+import edu.miu.attendifypro.domain.Student;
 import edu.miu.attendifypro.domain.StudentCourseSelection;
 import edu.miu.attendifypro.repository.StudentCourseSelectionRepository;
 import edu.miu.attendifypro.service.persistence.StudentCourseSelectionPersistenceService;
@@ -25,6 +26,17 @@ public class StudentCourseSelectionPersistenceServiceImpl implements StudentCour
         LocalDate targetDate = LocalDate.now().minusDays(n);
         return studentCourseSelectionRepository.getOfferingStartingInNDays(targetDate);
     }
+
+    @Override
+    public List<Student> findStudentByOfferingId(long id) {
+        return studentCourseSelectionRepository.findStudentsByCouseOfferingId(id);
+    }
+
+    @Override
+    public StudentCourseSelection save(StudentCourseSelection courseSelection) {
+        return studentCourseSelectionRepository.save(courseSelection);
+    }
+
     public List<StudentCourseSelection> findByStudentIdAndCourseOfferingId(String studentId, long courseOfferingId){
         return studentCourseSelectionRepository.findByStudentIdAndCourseOfferingId(studentId,courseOfferingId);
     }
