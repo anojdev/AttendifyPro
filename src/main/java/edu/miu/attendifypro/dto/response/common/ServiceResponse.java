@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
+
 public final class ServiceResponse<T> {
 
     private final Optional<T> data;
@@ -60,6 +61,8 @@ public final class ServiceResponse<T> {
     public Optional<T> getData() {
         return data.isEmpty()?Optional.empty():data;
     }
+
+
 
 
     public AppStatusCode getStatusCode() {
